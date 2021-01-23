@@ -1,4 +1,4 @@
-// For performing some operations asynchronously
+  // For performing some operations asynchronously
 import 'dart:async';
 import 'dart:convert';
 
@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
+import 'home.dart';
 
 void main() => runApp(MyApp());
 
@@ -307,9 +308,17 @@ class _BluetoothAppState extends State<BluetoothApp> {
                                   ),
                                 ),
                                 FlatButton(
-                                  onPressed: _connected
-                                      ? _sendOnMessageToBluetooth
-                                      : null,
+                                  onPressed: () {
+                                    if (_connected) {
+                                      _sendOnMessageToBluetooth();
+                                      Navigator.push(
+                                        context,
+                                      MaterialPageRoute(builder: (context) => Home())
+                                      );
+                                    } else{
+                                      _sendOffMessageToBluetooth();
+                                    }
+                                  },
                                   child: Text("ON"),
                                 ),
                                 FlatButton(
