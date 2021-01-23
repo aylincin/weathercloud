@@ -83,3 +83,10 @@ lint/generated/
 lint/outputs/
 lint/tmp/
 # lint/reports/
+
+flutter_bluetooth/.packages
+flutter_bluetooth/.flutter-plugins-dependencies
+flutter_bluetooth/.flutter-plugins
+flutter_bluetooth/.dart-tool/package_config.json
+
+
