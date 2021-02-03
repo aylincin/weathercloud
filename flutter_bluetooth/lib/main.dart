@@ -15,16 +15,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Weathercloud',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: BluetoothApp(),
+      home: Home(),
     );
   }
 }
 
-class BluetoothApp extends StatefulWidget {
+/*class BluetoothApp extends StatefulWidget {
   @override
   _BluetoothAppState createState() => _BluetoothAppState();
 }
@@ -511,4 +511,4 @@ class _BluetoothAppState extends State<BluetoothApp> {
       ),
     );
   }
-}
+}*/
