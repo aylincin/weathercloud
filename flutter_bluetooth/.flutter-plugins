@@ -1,2 +1,6 @@
 # This is a generated file; do not edit or check into version control.
 flutter_bluetooth_serial=P:\\src\\flutter\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\flutter_bluetooth_serial-0.2.2\\
+path_provider=P:\\src\\flutter\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\path_provider-1.6.27\\
+path_provider_linux=P:\\src\\flutter\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\path_provider_linux-0.0.1+2\\
+path_provider_macos=P:\\src\\flutter\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\path_provider_macos-0.0.4+8\\
+path_provider_windows=P:\\src\\flutter\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\path_provider_windows-0.0.4+3\\
