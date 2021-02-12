@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:google_fonts/google_fonts.dart';
+import 'home.dart';
 
 
 // For using PlatformException
@@ -157,7 +158,21 @@ class _BluetoothAppState extends State<BluetoothApp> {
             child: Column(
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.only(left: 30.0, top: 20.0, right: 30.0, bottom: 10.0),
+                  padding: const EdgeInsets.only(left: 30.0, top: 100.0, right: 5.0, bottom: 0.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        'CONNECT TO ARDUINO CLOUD',
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+                        textAlign: TextAlign.left,
+                        softWrap: true,
+                      )
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 30.0, top: 5.0, right: 30.0, bottom: 0.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
@@ -201,7 +216,7 @@ class _BluetoothAppState extends State<BluetoothApp> {
                       //mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
                         Padding(
-                          padding: const EdgeInsets.only(left: 0.0, top: 30.0, right: 100.0, bottom: 10.0),
+                          padding: const EdgeInsets.only(left: 0.0, top: 30.0, right: 100.0, bottom: 0.0),
                             child: Text(
                               "PAIRED DEVICES",
                               style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold , color: Colors.white),
@@ -209,13 +224,13 @@ class _BluetoothAppState extends State<BluetoothApp> {
                             )
                           ),
                         Padding(
-                          padding: const EdgeInsets.only(left: 30.0, top: 20.0, right: 30.0, bottom: 10.0),
+                          padding: const EdgeInsets.only(left: 30.0, top: 5.0, right: 30.0, bottom: 10.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               Text(
                                 'Device:',
-                                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+                                style: TextStyle(fontSize: 18, color: Colors.white),
                               ),
                               DropdownButton(
                                 items: _getDeviceItems(),
@@ -281,7 +296,7 @@ class _BluetoothAppState extends State<BluetoothApp> {
     if (_devicesList.isEmpty) {
       items.add(DropdownMenuItem(
         child: Text(
-          'NONE',
+          'No Device selected',
           style: TextStyle(color: Colors.white, fontSize: 18),
         ),
       ));
@@ -311,6 +326,7 @@ class _BluetoothAppState extends State<BluetoothApp> {
           connection = _connection;
           setState(() {
             _connected = true;
+            Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
           });
 
           connection.input.listen(null).onDone(() {
