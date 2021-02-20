@@ -184,9 +184,8 @@ class _BluetoothAppState extends State<BluetoothApp> {
         .then((Position position) {
       setState(() {
         _currentPosition = position;
-
+        generateWeatherData(2);
         print(_currentPosition);
-
       });
 
 
@@ -195,6 +194,53 @@ class _BluetoothAppState extends State<BluetoothApp> {
     });
   }
 
+void generateWeatherData(int button){
+    String url;
+    switch(button){
+      case 0:
+        url = "https://api.weather.com/v3/wx/forecast/daily/5day?geocode=-33.8469759,150.3715249&format=json&units=e&language=en-US&apiKey=118e3a7a78564ef28e3a7a78560ef2bf";
+        break;
+      case 1:
+        url = "https://api.weather.com/v3/wx/forecast/daily/5day?geocode=40.6971494,-74.2598627&format=json&units=e&language=en-US&apiKey=118e3a7a78564ef28e3a7a78560ef2bf";
+        break;
+      case 2:
+        if(_currentPosition != null) {
+          var longitude = _currentPosition.longitude;
+          var latitude = _currentPosition.latitude;
+          url = "https://api.weather.com/v3/wx/forecast/daily/5day?geocode= $longitude,$latitude&format=json&units=e&language=en-US&apiKey=118e3a7a78564ef28e3a7a78560ef2bf";
+        } else {
+          _getCurrentLocation();
+        }
+        break;
+      default:
+        break;
+    }
+
+    if(url != null) {
+      Future<int> tmpIconCode = fetchWeather(url);
+      if(tmpIconCode == 3  || tmpIconCode == 4 || tmpIconCode == 37 || tmpIconCode == 38 || tmpIconCode == 47){
+        //Gewitter
+        _sendOnMessageToBluetooth("1");
+      } else if(tmpIconCode == 31 || tmpIconCode == 32 || tmpIconCode == 33 || tmpIconCode == 34  || tmpIconCode == 36 ){
+        //Blauer Himmel
+        _sendOnMessageToBluetooth("2");
+      } else if(tmpIconCode == 0 || tmpIconCode == 1 || tmpIconCode == 2){
+        //Sturm
+        _sendOnMessageToBluetooth("3");
+      } else if(tmpIconCode == 19 || tmpIconCode == 20 || tmpIconCode == 21 || tmpIconCode == 22){
+        //Nebel
+        _sendOnMessageToBluetooth("4");
+      } else if(tmpIconCode == 5 || tmpIconCode == 6 || tmpIconCode == 7|| tmpIconCode == 8 || tmpIconCode == 9 || tmpIconCode == 10 || tmpIconCode == 11 || tmpIconCode == 12 || tmpIconCode == 35 || tmpIconCode == 39 || tmpIconCode == 40 || tmpIconCode == 45) {
+        //Regen
+        _sendOnMessageToBluetooth("5");
+      } else if(tmpIconCode == 13 || tmpIconCode == 14 || tmpIconCode == 15 || tmpIconCode == 16 || tmpIconCode == 17 || tmpIconCode == 18 || tmpIconCode == 25 || tmpIconCode == 41 || tmpIconCode == 42 || tmpIconCode == 43 || tmpIconCode == 46) {
+        //Schnee
+        _sendOnMessageToBluetooth("6");
+      } else {
+  _sendOnMessageToBluetooth("0");
+  }
+    }
+}
 
 
   Future<int> fetchWeather(var url) async {
@@ -218,6 +264,71 @@ class _BluetoothAppState extends State<BluetoothApp> {
     } else {
       print('Request failed with status: ${response.statusCode}.');
     }
+  }
+
+  void _disconnect() async {
+    print("not connected");
+
+    setState(() {
+      _isButtonUnavailable = true;
+      _deviceState = 0;
+    });
+
+    await connection.close();
+    show('Device disconnected');
+    if (!connection.isConnected) {
+      setState(() {
+        _connected = false;
+        _isButtonUnavailable = false;
+      });
+    }
+  }
+
+  //in home.dart for onCloudTapped _connected
+  // Method to send message,
+  // for turning the Bluetooth device on
+  void _sendOnMessageToBluetooth(String weatherCode) async {
+    print("send on message");
+
+    connection.output.add(utf8.encode(weatherCode + "\r\n"));
+    await connection.output.allSent;
+    show('Device Turned On');
+    print("Onmessage to bluetooth");
+    setState(() {
+      _deviceState = 1; // device on
+    });
+  }
+
+  //in home.dart for onCloudTapped _connected
+  // Method to send message,
+  // for turning the Bluetooth device off
+  void _sendOffMessageToBluetooth() async {
+    print("send off message");
+
+    connection.output.add(utf8.encode("0" + "\r\n"));
+    await connection.output.allSent;
+    show('Device Turned Off');
+    print("Offmessage to bluetooth");
+    setState(() {
+      _deviceState = -1; // device off
+    });
+  }
+
+  // Method to show a Snackbar,
+  // taking message as the text
+  Future show(
+      String message, {
+        Duration duration: const Duration(seconds: 3),
+      }) async {
+    await new Future.delayed(new Duration(milliseconds: 100));
+    _scaffoldKey.currentState.showSnackBar(
+      new SnackBar(
+        content: new Text(
+          message,
+        ),
+        duration: duration,
+      ),
+    );
   }
 
   // Now, its time to build the UI
@@ -254,7 +365,7 @@ class _BluetoothAppState extends State<BluetoothApp> {
                           _sendOffMessageToBluetooth();
                           _connected = true;
                         } else {
-                          _sendOnMessageToBluetooth();
+                          _sendOnMessageToBluetooth("0");
                           _connected = false;
                         }
 
@@ -571,68 +682,5 @@ class _BluetoothAppState extends State<BluetoothApp> {
   // }
 
   // Method to disconnect bluetooth
-  void _disconnect() async {
-    print("not connected");
 
-    setState(() {
-      _isButtonUnavailable = true;
-      _deviceState = 0;
-    });
-
-    await connection.close();
-    show('Device disconnected');
-    if (!connection.isConnected) {
-      setState(() {
-        _connected = false;
-        _isButtonUnavailable = false;
-      });
-    }
-  }
-
-  //in home.dart for onCloudTapped _connected
-  // Method to send message,
-  // for turning the Bluetooth device on
-   void _sendOnMessageToBluetooth() async {
-     print("send on message");
-
-     connection.output.add(utf8.encode("1" + "\r\n"));
-    await connection.output.allSent;
-    show('Device Turned On');
-    print("Onmessage to bluetooth");
-    setState(() {
-      _deviceState = 1; // device on
-    });
-  }
-
-  //in home.dart for onCloudTapped _connected
-  // Method to send message,
-  // for turning the Bluetooth device off
-   void _sendOffMessageToBluetooth() async {
-     print("send off message");
-
-     connection.output.add(utf8.encode("0" + "\r\n"));
-    await connection.output.allSent;
-    show('Device Turned Off');
-    print("Offmessage to bluetooth");
-    setState(() {
-      _deviceState = -1; // device off
-    });
-  }
-
-  // Method to show a Snackbar,
-  // taking message as the text
-  Future show(
-      String message, {
-        Duration duration: const Duration(seconds: 3),
-      }) async {
-    await new Future.delayed(new Duration(milliseconds: 100));
-    _scaffoldKey.currentState.showSnackBar(
-      new SnackBar(
-        content: new Text(
-          message,
-        ),
-        duration: duration,
-      ),
-    );
-  }
 }
