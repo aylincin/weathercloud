@@ -99,7 +99,7 @@ void UserPattern1(NeoPatterns *aNeoPatterns, color32_t aPixelColor, color32_t aB
     /*
      * Sample implementation not supporting DIRECTION_DOWN
      */
-    aNeoPatterns->ActivePattern = PATTERN_USER_PATTERN1;
+    //aNeoPatterns->ActivePattern = PATTERN_USER_PATTERN1;
     aNeoPatterns->Interval = aIntervalMillis;
     aNeoPatterns->Color1 = aPixelColor;
     aNeoPatterns->Direction = aDirection;
@@ -227,67 +227,60 @@ void flash(int zone, int lightningColorCustom){
  * let a pixel of aColor move up and down
  * starts and ends with all pixel cleared
  */
+
+
+
 void UserPattern2(NeoPatterns *aNeoPatterns, color32_t aColor, uint16_t aIntervalMillis, uint16_t aRepetitions,
-        uint8_t aDirection) {
+        uint8_t aDirection, int tiwnkleSpeedDelay) {
     /*
      * Sample implementation not supporting DIRECTION_DOWN
      */
-    aNeoPatterns->ActivePattern = PATTERN_USER_PATTERN2;
     aNeoPatterns->Interval = aIntervalMillis;
     aNeoPatterns->Color1 = aColor;
     aNeoPatterns->Direction = aDirection;
     aNeoPatterns->Index = 0;
     // *2 for up and down. (aNeoPatterns->numPixels() - 1) do not use end pixel twice.
     // +1 for the initial pattern with end pixel. + 2 for the first and last clear pattern.
-    aNeoPatterns->TotalStepCounter = ((aRepetitions + 1) * 2 * (aNeoPatterns->numPixels() - 1)) + 1 + 2;
+    aNeoPatterns->TotalStepCounter = 30;
     aNeoPatterns->clear();
     aNeoPatterns->show();
-    aNeoPatterns->lastUpdate = millis();
 }
 
 /*
  * @return - true if pattern has ended, false if pattern has NOT ended
  */
-bool UserPattern2Update(NeoPatterns *aNeoPatterns, bool aDoUpdate) {
-    /*
-     * Sample implementation
-     */
-    if (aDoUpdate) {
-        // clear old pixel
-        aNeoPatterns->setPixelColor(aNeoPatterns->Index, COLOR32_BLACK);
+unsigned long lastTwinkleUpdate = 0;
+int ledCounter = 0;
 
-        if (aNeoPatterns->decrementTotalStepCounterAndSetNextIndex()) {
-            return true;
-        }
-        /*
-         * Next index
-         */
-        if (aNeoPatterns->Direction == DIRECTION_UP) {
-            // do not use top pixel twice
-            if (aNeoPatterns->Index == (aNeoPatterns->numPixels() - 1)) {
-                aNeoPatterns->Direction = DIRECTION_DOWN;
-            }
-        } else {
-            // do not use bottom pixel twice
-            if (aNeoPatterns->Index == 0) {
-                aNeoPatterns->Direction = DIRECTION_UP;
-            }
-        }
+bool UserPattern2Update(NeoPatterns *aNeoPatterns, bool aDoUpdate) {
+
+    if(lastTwinkleUpdate == 0){
+      lastTwinkleUpdate = millis();
+      
+      if(random(2) == 1){
+       bar16.setPixelColor(random(150),50,50,50);
+      }
+      else{
+        bar16.setPixelColor(random(150),15, 15, 100);
+      }
+      bar16.show();
+      ledCounter++;
     }
-    /*
-     * Refresh pattern
-     */
-    if (aNeoPatterns->TotalStepCounter != 1) {
-        // last pattern is clear
-        aNeoPatterns->setPixelColor(aNeoPatterns->Index, aNeoPatterns->Color1);
-    }
+
+    if(millis() - lastTwinkleUpdate > 125){
+      lastTwinkleUpdate = 0;
+      bar16.setPixelColor(random(150), 0, 0, 0);
+    }  
+
+
     return false;
 }
 
 /*
  * Handler for testing your own patterns
  */
-static int8_t sState = 1;
+static int8_t sState = 9;
+bool fadeUp = false;
 
 void ownPatterns(NeoPatterns *aLedsPtr) {
 
@@ -303,19 +296,54 @@ void ownPatterns(NeoPatterns *aLedsPtr) {
     case 2:
         UserPattern2(aLedsPtr, NeoPatterns::Wheel(tColor), tDuration, tRepetitions, FORWARD);
         break;
-        
+        //Regen (5)
     case 3:
-        bar16.Fade(bar16.Color(255,0,0,150), bar16.Color(0,255,0,150), 100, 100);
-            sState = 4;
+        fadeUp = fadeUp ? false : true;
+        toggleFade(fadeUp, bar16.Color(15, 75, 100), bar16.Color(0, 50, 125),100, 100);
         break;
-        
+        //Blauer Himmel (2)
     case 4:
-        bar16.Fade(bar16.Color(0,255,0,150), bar16.Color(255,0,0,150), 100, 100);
-            sState = 3;
+        fadeUp = fadeUp ? false : true;
+        toggleFade(fadeUp, bar16.Color(30,30,30), bar16.Color(80, 80, 80), 100, 100);
         break;
-
+        //Nebel (4)
+    case 5:
+        fadeUp = fadeUp ? false : true;
+        toggleFade(fadeUp, bar16.Color(150, 70, 0), bar16.Color(00, 50, 150), 75, 100);
+        break;
+        //Sonne (7)
+    case 6:
+        bar16.Stripes(bar16.Color(120, 40, 60), 10, bar16.Color(0, 50, 125), 10, 200,
+            80);
+            //schön bitte behalten
+        break;
+    case 7:
+        bar16.Stripes(bar16.Color(30, 30, 30), 25, bar16.Color(30, 0, 100), 25, 500,
+            25);
+            //Sturm (3)
+        break;
+     case 8:
+        bar16.ColorWipe(bar16.Color(150, 70, 0), 100);
+            //auch schön bitte behalten
+        break;
+     case 9:
+        bar16.RainbowCycle(100);
+            //auch schön bitte behalten, vllt case 0?
+        break;
     default:
         Serial.println("ERROR");
         break;
     }
 }
+
+
+void toggleFade(bool up, color32_t aColorStart, color32_t aColorEnd, uint16_t aNumberOfSteps, uint16_t aIntervalMillis){
+  if(up){
+    bar16.Fade(aColorStart, aColorEnd, aNumberOfSteps, aIntervalMillis);
+  }
+  else{
+      bar16.Fade(aColorEnd, aColorStart, aNumberOfSteps, aIntervalMillis);
+  }
+}
+
+//bar16.Color(0,255,0,150)
