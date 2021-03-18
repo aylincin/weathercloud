@@ -221,7 +221,7 @@ void generateWeatherData(int button){
       if(tmpIconCode == 3  || tmpIconCode == 4 || tmpIconCode == 37 || tmpIconCode == 38 || tmpIconCode == 47){
         //Gewitter
         _sendOnMessageToBluetooth("1");
-      } else if(tmpIconCode == 31 || tmpIconCode == 32 || tmpIconCode == 33 || tmpIconCode == 34  || tmpIconCode == 36 ){
+      } else if(tmpIconCode == 31 || tmpIconCode == 32 || tmpIconCode == 33 || tmpIconCode == 34 || tmpIconCode == 23 || tmpIconCode == 24){
         //Blauer Himmel
         _sendOnMessageToBluetooth("2");
       } else if(tmpIconCode == 0 || tmpIconCode == 1 || tmpIconCode == 2){
@@ -236,9 +236,15 @@ void generateWeatherData(int button){
       } else if(tmpIconCode == 13 || tmpIconCode == 14 || tmpIconCode == 15 || tmpIconCode == 16 || tmpIconCode == 17 || tmpIconCode == 18 || tmpIconCode == 25 || tmpIconCode == 41 || tmpIconCode == 42 || tmpIconCode == 43 || tmpIconCode == 46) {
         //Schnee
         _sendOnMessageToBluetooth("6");
+      } else if (tmpIconCode == 26 || tmpIconCode == 27 || tmpIconCode == 28 || tmpIconCode == 29 || tmpIconCode == 30){
+        //Wolkig
+        _sendOnMessageToBluetooth("7");
+      } else if (tmpIconCode == 32 || tmpIconCode == 36) {
+        //Sonnig
+        _sendOnMessageToBluetooth("8");
       } else {
-  _sendOnMessageToBluetooth("0");
-  }
+        _sendOnMessageToBluetooth("0");
+      }
     }
 }
 
