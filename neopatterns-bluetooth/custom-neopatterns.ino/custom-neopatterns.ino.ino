@@ -70,6 +70,26 @@ int* generateZones(){
     return zones;
   }
 
+
+int* zoneArray;
+int zoneCount;
+int zoneToFlash;
+int startLed;
+int middleLed;
+int endLed;
+int lightningColorWeak;
+int lightningColor;
+int afterFlash;
+
+unsigned long lastUpdate = 0;
+unsigned long afterFlashLastUpdate = 0;
+unsigned long randomWait = 0;
+int delayCounter = 0;
+int afterFlashCount = 0;
+int afterFlashInLoopCount = 0;
+int randomWaitBool = false;
+int randomWaitValue;
+
 /*
  * set all pixel to aColor1 and let a pixel of color2 move through
  * Starts with all pixel aColor1 and also ends with it.
@@ -82,10 +102,8 @@ void UserPattern1(NeoPatterns *aNeoPatterns, color32_t aPixelColor, color32_t aB
     aNeoPatterns->ActivePattern = PATTERN_USER_PATTERN1;
     aNeoPatterns->Interval = aIntervalMillis;
     aNeoPatterns->Color1 = aPixelColor;
-    aNeoPatterns->LongValue1.BackgroundColor = aBackgroundColor;
     aNeoPatterns->Direction = aDirection;
     aNeoPatterns->TotalStepCounter = aNeoPatterns->numPixels() + 1;
-    aNeoPatterns->ColorSet(aBackgroundColor);
     aNeoPatterns->show();
     aNeoPatterns->lastUpdate = millis();
 }
@@ -103,71 +121,107 @@ bool UserPattern1Update(NeoPatterns *aNeoPatterns, bool aDoUpdate) {
         }
     }
 
-    int* zoneArray = generateZones();
-    int zoneCount = bar16.numPixels()/zoneSize;
-    int zoneToFlash = random(zoneCount)-1;
-  
-    int randomWait = 1000 * random(3);
-    int colorNormal = bar16.Color(230, 230, 255, random(100));
-    flash(zones[zoneToFlash], colorNormal);
-    
-    
-    bar16.show();
-    delay(randomWait);
-  
+    if(delayCounter == 0){
+        zoneArray = generateZones();
+        zoneCount = bar16.numPixels()/zoneSize;
+        zoneToFlash = random(zoneCount)-1;
+        startLed = zones[zoneToFlash];
+        middleLed = zones[zoneToFlash] + (zoneSize/2);
+        endLed = zones[zoneToFlash] + zoneSize;
+        lightningColorWeak = bar16.Color(230, 230, 255, random(100));
+        lightningColor = bar16.Color(random(255), random(255), 60, 250);
+        afterFlash = 3 + random(5);
+        
+        lastUpdate = millis();
+        bar16.setPixelColor(middleLed, lightningColor);
+        bar16.setPixelColor(middleLed+2, lightningColor);
+        bar16.setPixelColor(middleLed-2, lightningColor);
+        bar16.show();
+        delayCounter++;
+      }
+      
+      if((millis() - lastUpdate) > 50 && delayCounter == 1){
+        bar16.setPixelColor(endLed-random(30), lightningColorWeak);
+        bar16.setPixelColor(startLed+random(30), lightningColorWeak);
+        bar16.show();
+        delayCounter++;
+      }
+
+      if((millis() - lastUpdate) > 130 && delayCounter == 2){
+        bar16.setPixelColor(startLed+random(20), lightningColorWeak);
+        bar16.setPixelColor(endLed-random(20), lightningColorWeak);
+        bar16.setPixelColor(startLed+random(10), lightningColorWeak);
+        bar16.setPixelColor(endLed-random(10), lightningColorWeak);
+        bar16.show();
+        delayCounter++;
+      }
+
+      if((millis() - lastUpdate) > 230 && delayCounter == 3){
+        bar16.clear();
+        delayCounter++;
+      }
+
+      if(delayCounter == 4 && afterFlashCount < afterFlash){
+        
+        if(afterFlashInLoopCount == 0){
+          afterFlashLastUpdate = millis();
+          bar16.setPixelColor(endLed-random(30), lightningColorWeak);
+          bar16.setPixelColor(startLed+random(30), lightningColorWeak);
+          bar16.show();
+          afterFlashInLoopCount++;
+        }
+        
+        if((millis() - afterFlashLastUpdate) > 70 && afterFlashInLoopCount == 1){
+          bar16.setPixelColor(startLed+random(20), lightningColorWeak);
+          bar16.setPixelColor(endLed-random(20), lightningColorWeak);
+          bar16.setPixelColor(startLed+random(10), lightningColorWeak);
+          bar16.setPixelColor(endLed-random(10), lightningColorWeak);
+          bar16.show();
+          afterFlashInLoopCount++;
+        }
+        
+        if((millis() - afterFlashLastUpdate) > 170 && afterFlashInLoopCount == 2){
+          bar16.clear();
+          afterFlashInLoopCount = 0;
+          afterFlashCount++;
+        } 
+      }
+
+      if(afterFlashCount == afterFlash){
+        delayCounter++;
+        afterFlashCount = 0;
+      }
+
+      if(delayCounter == 5){
+        if(!randomWaitBool){
+          bar16.show();
+          randomWaitValue = random(1000);
+          randomWait = millis();
+          randomWaitBool = true;
+        }
+        if(millis() - randomWait > randomWaitValue){
+          delayCounter = 0;
+          randomWaitBool = false;
+        }
+      }
+
+      
 
     return false;
 }
 
+
+
+
 void flash(int zone, int lightningColorCustom){
-    int startLed = zone;
-    int middleLed = zone + (zoneSize/2);
-    int endLed = zone + zoneSize;
-    int lightningColorWeak = bar16.Color(230, 230, 255, random(100));
-    int lightningColor = bar16.Color(random(255), random(255), 60, 250);
-    int afterFlash = 3 + random(5);
+
 
     if(lightningColorCustom){
         lightningColorWeak = lightningColorCustom;
       }
-    
-    bar16.setPixelColor(middleLed, lightningColor);
-    bar16.setPixelColor(middleLed+2, lightningColor);
-    bar16.setPixelColor(middleLed-2, lightningColor);
-    bar16.show();
-    delay(50);
-    
-    bar16.setPixelColor(endLed-random(30), lightningColorWeak);
-    bar16.setPixelColor(startLed+random(30), lightningColorWeak);
-    bar16.show();
-    delay(80);
-    
-    bar16.setPixelColor(startLed+random(20), lightningColorWeak);
-    bar16.setPixelColor(endLed-random(20), lightningColorWeak);
 
-    bar16.setPixelColor(startLed+random(10), lightningColorWeak);
-    bar16.setPixelColor(endLed-random(10), lightningColorWeak);
-    bar16.show();
-    delay(100);
-
-    bar16.clear();
-
-    for(int i = 0; i < afterFlash; i++){
-        bar16.setPixelColor(endLed-random(30), lightningColorWeak);
-        bar16.setPixelColor(startLed+random(30), lightningColorWeak);
-        bar16.show();
-        delay(70);
-        
-        bar16.setPixelColor(startLed+random(20), lightningColorWeak);
-        bar16.setPixelColor(endLed-random(20), lightningColorWeak);
     
-        bar16.setPixelColor(startLed+random(10), lightningColorWeak);
-        bar16.setPixelColor(endLed-random(10), lightningColorWeak);
-        bar16.show();
-        delay(100);  
-        bar16.clear();
-    }   
-  }
+}
 
 /*
  * let a pixel of aColor move up and down
@@ -233,7 +287,8 @@ bool UserPattern2Update(NeoPatterns *aNeoPatterns, bool aDoUpdate) {
 /*
  * Handler for testing your own patterns
  */
-static int8_t sState = 0;
+static int8_t sState = 1;
+
 void ownPatterns(NeoPatterns *aLedsPtr) {
 
     uint8_t tDuration = random(20, 120);
@@ -247,6 +302,16 @@ void ownPatterns(NeoPatterns *aLedsPtr) {
 
     case 2:
         UserPattern2(aLedsPtr, NeoPatterns::Wheel(tColor), tDuration, tRepetitions, FORWARD);
+        break;
+        
+    case 3:
+        bar16.Fade(bar16.Color(255,0,0,150), bar16.Color(0,255,0,150), 100, 100);
+            sState = 4;
+        break;
+        
+    case 4:
+        bar16.Fade(bar16.Color(0,255,0,150), bar16.Color(255,0,0,150), 100, 100);
+            sState = 3;
         break;
 
     default:
