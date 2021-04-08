@@ -50,6 +50,15 @@ class _BluetoothAppState extends State<BluetoothApp> {
   bool newYork = true;
   bool sydney = true;
 
+  bool thunder = true;
+  bool storm = true;
+  bool fog = true;
+  bool rain = true;
+  bool sun = true;
+  bool bluesky = true;
+  bool snow = true;
+  bool cloudy = true;
+
   Position _currentPosition;
 
   @override
@@ -386,97 +395,439 @@ void generateWeatherData(int button){
                           print("Not connected");
                         }
                       }),
-                  new Column(
+                  new Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Padding(padding: EdgeInsets.all(8.0)),
-                      new SizedBox(
-                        height: 50,
-                        width: 300,
-                        child: TextButton(
-                          child: Text('HOME'),
-                          style: TextButton.styleFrom(
-                            backgroundColor: home
-                                ? Colors.transparent
-                                : Colors.white,
-                            primary: home
-                                ? Colors.white
-                                : Colors.grey,
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: new SizedBox(
+                          height: 40,
+                          width: 80,
+                          child: TextButton(
+                            child: Text('HOME'),
+                            style: TextButton.styleFrom(
+                              backgroundColor: home
+                                  ? Colors.transparent
+                                  : Colors.white,
+                              primary: home
+                                  ? Colors.white
+                                  : Colors.grey,
+                            ),
+                            onPressed: () {
+                              print('pressed home');
+                              setState(() {
+                                //getPosition();
+                                _getCurrentLocation();
+                                fetchWeather("https://api.weather.com/v3/wx/forecast/daily/5day?geocode=-33.8469759,150.3715249&format=json&units=e&language=en-US&apiKey=118e3a7a78564ef28e3a7a78560ef2bf");
+                                sydney = true;
+                                newYork = true;
+                                storm = true;
+                                thunder = true;
+                                fog = true;
+                                sun = true;
+                                bluesky = true;
+                                snow = true;
+                                cloudy = true;
+                                rain = true;
+
+                                home = !home;
+                              });
+                            },
                           ),
-                          onPressed: () {
-                            print('pressed home');
-                            setState(() {
-                              //getPosition();
-                              _getCurrentLocation();
-                              fetchWeather("https://api.weather.com/v3/wx/forecast/daily/5day?geocode=-33.8469759,150.3715249&format=json&units=e&language=en-US&apiKey=118e3a7a78564ef28e3a7a78560ef2bf");
-                              newYork = true;
-                              sydney = true;
-                              home = !home;
-                            });
-                          },
                         ),
                       ),
-                    ],
-                  ),
-                  new Column(
-                    children: [
-                      Padding(padding: EdgeInsets.all(8.0)),
-                      new SizedBox(
-                        height: 50,
-                        width: 300,
-                        child: TextButton(
-                          child: Text('NEW YORK'),
-                          style: TextButton.styleFrom(
-                            backgroundColor: newYork
-                                ? Colors.transparent
-                                : Colors.white,
-                            primary: newYork
-                                ? Colors.white
-                                : Colors.grey,
+                      Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: new SizedBox(
+                            height: 40,
+                            width: 90,
+                            child: TextButton(
+                              child: Text('NEW YORK'),
+                              style: TextButton.styleFrom(
+                                backgroundColor: newYork
+                                    ? Colors.transparent
+                                    : Colors.white,
+                                primary: newYork
+                                    ? Colors.white
+                                    : Colors.grey,
+                              ),
+                              onPressed: () {
+                                print('pressed home');
+                                setState(() {
+                                  fetchWeather('https://api.weather.com/v2/pws/observations/current?stationId=KNYNEWYO1384&format=json&units=m&apiKey=118e3a7a78564ef28e3a7a78560ef2bf');
+                                  home = true;
+                                  sydney = true;
+                                  storm = true;
+                                  thunder = true;
+                                  fog = true;
+                                  sun = true;
+                                  bluesky = true;
+                                  snow = true;
+                                  cloudy = true;
+                                  rain = true;
+
+                                  newYork = !newYork;
+                                });
+                              },
+                            ),
                           ),
-                          onPressed: () {
-                            print('pressed home');
-                            setState(() {
-                              fetchWeather('https://api.weather.com/v2/pws/observations/current?stationId=KNYNEWYO1384&format=json&units=m&apiKey=118e3a7a78564ef28e3a7a78560ef2bf');
-                              newYork = !newYork;
-                              sydney = true;
-                              home = true;
-                            });
-                          },
-                        ),
                       ),
-                    ],
-                  ),
-                  new Column(
-                    children: [
-                      Padding(padding: EdgeInsets.all(8.0)),
-                      new SizedBox(
-                        height: 50,
-                        width: 300,
-                        child: TextButton(
-                          child: Text('SYDNEY'),
-                          style: TextButton.styleFrom(
-                            backgroundColor: sydney
-                                ? Colors.transparent
-                                : Colors.white,
-                            primary: sydney
-                                ? Colors.white
-                                : Colors.grey,
+
+                      Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: new SizedBox(
+                            height: 40,
+                            width: 80,
+                            child: TextButton(
+                              child: Text('SYDNEY'),
+                              style: TextButton.styleFrom(
+                                backgroundColor: sydney
+                                    ? Colors.transparent
+                                    : Colors.white,
+                                primary: sydney
+                                    ? Colors.white
+                                    : Colors.grey,
+                              ),
+                              onPressed: () {
+                                print('pressed home');
+                                fetchWeather('https://api.weather.com/v3/wx/forecast/daily/5day?geocode=-33.8469759,150.3715249&format=json&units=e&language=en-US&apiKey=118e3a7a78564ef28e3a7a78560ef2bf');
+                                setState(() {
+                                  home = true;
+                                  newYork = true;
+                                  storm = true;
+                                  thunder = true;
+                                  fog = true;
+                                  sun = true;
+                                  bluesky = true;
+                                  snow = true;
+                                  cloudy = true;
+                                  rain = true;
+
+                                  sydney = !sydney;
+                                });
+                              },
+                            ),
                           ),
-                          onPressed: () {
-                            print('pressed home');
-                            fetchWeather('https://api.weather.com/v3/wx/forecast/daily/5day?geocode=-33.8469759,150.3715249&format=json&units=e&language=en-US&apiKey=118e3a7a78564ef28e3a7a78560ef2bf');
-                            setState(() {
-                              newYork = true;
-                              sydney = !sydney;
-                              home = true;
-                            });
-                          },
-                        ),
                       ),
+
                     ],
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 10.0, top: 50.0, right: 5.0, bottom: 0.0),
+                    padding: EdgeInsets.only(top: 20.0),
+                    child: new Text('MODI', style: TextStyle(color: Colors.white, fontSize: 20.0, fontWeight: FontWeight.bold)),
+                  ),
+                  new Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: new SizedBox(
+                          height: 40,
+                          width: 80,
+                          child: TextButton(
+                            child: Text('THUNDER'),
+                            style: TextButton.styleFrom(
+                              backgroundColor: thunder
+                                  ? Colors.transparent
+                                  : Colors.white,
+                              primary: thunder
+                                  ? Colors.white
+                                  : Colors.grey,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                //getPosition();
+                                _getCurrentLocation();
+                                fetchWeather("https://api.weather.com/v3/wx/forecast/daily/5day?geocode=-33.8469759,150.3715249&format=json&units=e&language=en-US&apiKey=118e3a7a78564ef28e3a7a78560ef2bf");
+                                home = true;
+                                newYork = true;
+                                sydney = true;
+                                storm = true;
+                                fog = true;
+                                rain = true;
+                                sun = true;
+                                bluesky = true;
+                                snow = true;
+                                cloudy = true;
+
+
+                                thunder = !thunder;
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: new SizedBox(
+                          height: 40,
+                          width: 90,
+                          child: TextButton(
+                            child: Text('STORM'),
+                            style: TextButton.styleFrom(
+                              backgroundColor: storm
+                                  ? Colors.transparent
+                                  : Colors.white,
+                              primary: storm
+                                  ? Colors.white
+                                  : Colors.grey,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                fetchWeather('https://api.weather.com/v2/pws/observations/current?stationId=KNYNEWYO1384&format=json&units=m&apiKey=118e3a7a78564ef28e3a7a78560ef2bf');
+                                home = true;
+                                newYork = true;
+                                sydney = true;
+                                thunder = true;
+                                fog = true;
+                                rain = true;
+                                sun = true;
+                                bluesky = true;
+                                snow = true;
+                                cloudy = true;
+
+
+                                storm = !storm;
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: new SizedBox(
+                          height: 40,
+                          width: 80,
+                          child: TextButton(
+                            child: Text('FOG'),
+                            style: TextButton.styleFrom(
+                              backgroundColor: fog
+                                  ? Colors.transparent
+                                  : Colors.white,
+                              primary: fog
+                                  ? Colors.white
+                                  : Colors.grey,
+                            ),
+                            onPressed: () {
+                              print('pressed home');
+                              fetchWeather('https://api.weather.com/v3/wx/forecast/daily/5day?geocode=-33.8469759,150.3715249&format=json&units=e&language=en-US&apiKey=118e3a7a78564ef28e3a7a78560ef2bf');
+                              setState(() {
+                                home = true;
+                                newYork = true;
+                                sydney = true;
+                                storm = true;
+                                thunder = true;
+                                rain = true;
+                                sun = true;
+                                bluesky = true;
+                                snow = true;
+                                cloudy = true;
+
+                                fog = !fog;
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+
+                    ],
+                  ),
+                  new Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: new SizedBox(
+                          height: 40,
+                          width: 80,
+                          child: TextButton(
+                            child: Text('RAIN'),
+                            style: TextButton.styleFrom(
+                              backgroundColor: rain
+                                  ? Colors.transparent
+                                  : Colors.white,
+                              primary: rain
+                                  ? Colors.white
+                                  : Colors.grey,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                //getPosition();
+                                _getCurrentLocation();
+                                fetchWeather("https://api.weather.com/v3/wx/forecast/daily/5day?geocode=-33.8469759,150.3715249&format=json&units=e&language=en-US&apiKey=118e3a7a78564ef28e3a7a78560ef2bf");
+                                home = true;
+                                newYork = true;
+                                sydney = true;
+                                storm = true;
+                                thunder = true;
+                                fog = true;
+                                sun = true;
+                                bluesky = true;
+                                snow = true;
+                                cloudy = true;
+
+                                rain = !rain;
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: new SizedBox(
+                          height: 40,
+                          width: 90,
+                          child: TextButton(
+                            child: Text('SUN'),
+                            style: TextButton.styleFrom(
+                              backgroundColor: sun
+                                  ? Colors.transparent
+                                  : Colors.white,
+                              primary: sun
+                                  ? Colors.white
+                                  : Colors.grey,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                fetchWeather('https://api.weather.com/v2/pws/observations/current?stationId=KNYNEWYO1384&format=json&units=m&apiKey=118e3a7a78564ef28e3a7a78560ef2bf');
+                                home = true;
+                                newYork = true;
+                                sydney = true;
+                                storm = true;
+                                thunder = true;
+                                fog = true;
+                                rain = true;
+                                bluesky = true;
+                                snow = true;
+                                cloudy = true;
+
+                                sun = !sun;
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: new SizedBox(
+                          height: 40,
+                          width: 80,
+                          child: TextButton(
+                            child: Text('BLUE SKY'),
+                            style: TextButton.styleFrom(
+                              backgroundColor: bluesky
+                                  ? Colors.transparent
+                                  : Colors.white,
+                              primary: bluesky
+                                  ? Colors.white
+                                  : Colors.grey,
+                            ),
+                            onPressed: () {
+                              print('pressed home');
+                              fetchWeather('https://api.weather.com/v3/wx/forecast/daily/5day?geocode=-33.8469759,150.3715249&format=json&units=e&language=en-US&apiKey=118e3a7a78564ef28e3a7a78560ef2bf');
+                              setState(() {
+                                home = true;
+                                newYork = true;
+                                sydney = true;
+                                storm = true;
+                                thunder = true;
+                                fog = true;
+                                sun = true;
+                                rain = true;
+                                snow = true;
+                                cloudy = true;
+
+                                bluesky = !bluesky;
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+
+                    ],
+                  ),
+                  new Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: new SizedBox(
+                          height: 40,
+                          width: 90,
+                          child: TextButton(
+                            child: Text('SNOW'),
+                            style: TextButton.styleFrom(
+                              backgroundColor: snow
+                                  ? Colors.transparent
+                                  : Colors.white,
+                              primary: snow
+                                  ? Colors.white
+                                  : Colors.grey,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                fetchWeather('https://api.weather.com/v2/pws/observations/current?stationId=KNYNEWYO1384&format=json&units=m&apiKey=118e3a7a78564ef28e3a7a78560ef2bf');
+                                home = true;
+                                newYork = true;
+                                sydney = true;
+                                storm = true;
+                                thunder = true;
+                                fog = true;
+                                sun = true;
+                                bluesky = true;
+                                rain = true;
+                                cloudy = true;
+
+                                snow = !snow;
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: new SizedBox(
+                          height: 40,
+                          width: 80,
+                          child: TextButton(
+                            child: Text('CLOUDY'),
+                            style: TextButton.styleFrom(
+                              backgroundColor: cloudy
+                                  ? Colors.transparent
+                                  : Colors.white,
+                              primary: cloudy
+                                  ? Colors.white
+                                  : Colors.grey,
+                            ),
+                            onPressed: () {
+                              print('pressed home');
+                              fetchWeather('https://api.weather.com/v3/wx/forecast/daily/5day?geocode=-33.8469759,150.3715249&format=json&units=e&language=en-US&apiKey=118e3a7a78564ef28e3a7a78560ef2bf');
+                              setState(() {
+                                home = true;
+                                newYork = true;
+                                sydney = true;
+                                storm = true;
+                                thunder = true;
+                                fog = true;
+                                sun = true;
+                                bluesky = true;
+                                snow = true;
+                                rain = true;
+
+                                cloudy = !cloudy;
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10.0, top: 30.0, right: 5.0, bottom: 0.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
