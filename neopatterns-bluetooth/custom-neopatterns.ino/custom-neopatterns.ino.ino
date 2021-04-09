@@ -22,6 +22,8 @@ void setup() {
 
 char Incoming_value = 0;
 bool killAnimation = false;
+static int8_t sState = 0;
+
 void loop() {
     if (Serial.available() > 0)
     {
@@ -35,16 +37,53 @@ void loop() {
       // Checking whether value of the variable
       // is equal to 0
       if (Incoming_value == '0'){
-        bar16.ColorSet(bar16.Color(0, 0, 0));
-        digitalWrite(8, LOW); // If value is 0, turn OFF the device
         killAnimation = true;
+        clearStrip();
       }
         
   
       // Checking whether value of the variable
       // is equal to 1
       else if (Incoming_value == '1'){
-        digitalWrite(8, HIGH); // If value is 1, turn ON the device
+        sState = 1;
+        ownPatterns(&bar16);
+        killAnimation = false;
+      }
+      
+      else if (Incoming_value == '2'){
+        sState = 2;
+        ownPatterns(&bar16);
+        killAnimation = false;
+      }
+
+      else if (Incoming_value == '3'){
+        sState = 3;
+        ownPatterns(&bar16);
+        killAnimation = false;
+      }
+      else if (Incoming_value == '4'){
+        sState = 4;
+        ownPatterns(&bar16);
+        killAnimation = false;
+      }
+      else if (Incoming_value == '5'){
+        sState = 5;
+        ownPatterns(&bar16);
+        killAnimation = false;
+      }
+      else if (Incoming_value == '6'){
+        sState = 6;
+        ownPatterns(&bar16);
+        killAnimation = false;
+      }
+      else if (Incoming_value == '7'){
+        sState = 7;
+        ownPatterns(&bar16);
+        killAnimation = false;
+      }
+      else if (Incoming_value == '8'){
+        sState = 8;
+        ownPatterns(&bar16);
         killAnimation = false;
       }
         
@@ -52,6 +91,13 @@ void loop() {
   if(!killAnimation){
     bar16.update();
   }
+}
+
+void clearStrip(){
+  for(int i = 0; i < bar16.numPixels(); i++){
+    bar16.setPixelColor(i,0,0,0);
+  }
+  bar16.show();
 }
 
 
@@ -99,7 +145,7 @@ void UserPattern1(NeoPatterns *aNeoPatterns, color32_t aPixelColor, color32_t aB
     /*
      * Sample implementation not supporting DIRECTION_DOWN
      */
-    //aNeoPatterns->ActivePattern = PATTERN_USER_PATTERN1;
+    aNeoPatterns->ActivePattern = PATTERN_USER_PATTERN1;
     aNeoPatterns->Interval = aIntervalMillis;
     aNeoPatterns->Color1 = aPixelColor;
     aNeoPatterns->Direction = aDirection;
@@ -258,7 +304,7 @@ bool UserPattern2Update(NeoPatterns *aNeoPatterns, bool aDoUpdate) {
       lastTwinkleUpdate = millis();
       
       if(random(2) == 1){
-       bar16.setPixelColor(random(150),50,50,50);
+       bar16.setPixelColor(random(150),50,50,100);
       }
       else{
         bar16.setPixelColor(random(150),15, 15, 100);
@@ -276,59 +322,116 @@ bool UserPattern2Update(NeoPatterns *aNeoPatterns, bool aDoUpdate) {
     return false;
 }
 
+void UserPattern3(NeoPatterns *aNeoPatterns, color32_t aColor, uint16_t aIntervalMillis, uint16_t aRepetitions,
+        uint8_t aDirection) {
+    /*
+     * Sample implementation not supporting DIRECTION_DOWN
+     */
+    aNeoPatterns->Interval = aIntervalMillis;
+    aNeoPatterns->Color1 = aColor;
+    aNeoPatterns->Direction = aDirection;
+    aNeoPatterns->Index = 0;
+    // *2 for up and down. (aNeoPatterns->numPixels() - 1) do not use end pixel twice.
+    // +1 for the initial pattern with end pixel. + 2 for the first and last clear pattern.
+    aNeoPatterns->TotalStepCounter = 30;
+    aNeoPatterns->clear();
+    aNeoPatterns->show();
+}
+
+/*
+ * @return - true if pattern has ended, false if pattern has NOT ended
+ */
+unsigned long lastSnowTwinkleUpdate = 0;
+
+bool UserPattern3Update(NeoPatterns *aNeoPatterns, bool aDoUpdate) {
+
+    if(lastSnowTwinkleUpdate == 0){
+      lastSnowTwinkleUpdate = millis();
+      
+      if(random(2) == 1){
+       bar16.setPixelColor(random(150),50,50,50);
+      }
+      else{
+        bar16.setPixelColor(random(150),15, 15, 100);
+      }
+      bar16.show();
+    }
+
+    if(millis() - lastTwinkleUpdate > 125){
+      lastSnowTwinkleUpdate = 0;
+      bar16.setPixelColor(random(150), 0, 0, 0);
+    }  
+
+
+    return false;
+}
+
 /*
  * Handler for testing your own patterns
  */
-static int8_t sState = 9;
 bool fadeUp = false;
 
 void ownPatterns(NeoPatterns *aLedsPtr) {
-
+  
     uint8_t tDuration = random(20, 120);
     uint8_t tColor = random(255);
     uint8_t tRepetitions = random(2);
+    Serial.print("State: ");
+    Serial.print(sState);
+    Serial.print("\n");
+    
 
     switch (sState) { //hier vielleicht Incoming_value benutzen
     case 1:
         UserPattern1(aLedsPtr, COLOR32_RED_HALF, NeoPatterns::Wheel(tColor), tDuration, FORWARD);
         break;
-
+        //Gewitter (1)
     case 2:
-        UserPattern2(aLedsPtr, NeoPatterns::Wheel(tColor), tDuration, tRepetitions, FORWARD);
-        break;
-        //Regen (5)
-    case 3:
         fadeUp = fadeUp ? false : true;
         toggleFade(fadeUp, bar16.Color(15, 75, 100), bar16.Color(0, 50, 125),100, 100);
         break;
         //Blauer Himmel (2)
+    case 3:
+        bar16.Stripes(bar16.Color(30, 30, 30), 25, bar16.Color(30, 0, 100), 25, 500,
+            25);
+            //Sturm (3)
+        break;
     case 4:
         fadeUp = fadeUp ? false : true;
         toggleFade(fadeUp, bar16.Color(30,30,30), bar16.Color(80, 80, 80), 100, 100);
         break;
         //Nebel (4)
     case 5:
+        UserPattern2(aLedsPtr, NeoPatterns::Wheel(tColor), tDuration, tRepetitions, FORWARD);
+        break;
+        //Regen (5)
+    case 6:
+        UserPattern3(aLedsPtr, NeoPatterns::Wheel(tColor), tDuration, tRepetitions, FORWARD);
+        break;
+        //Schnee (6)
+    case 7:
+        fadeUp = fadeUp ? false : true;
+        toggleFade(fadeUp, bar16.Color(30,30,130), bar16.Color(80, 80, 80), 100, 100);
+        break;
+        //Wolkig (7)
+    case 8:
         fadeUp = fadeUp ? false : true;
         toggleFade(fadeUp, bar16.Color(150, 70, 0), bar16.Color(00, 50, 150), 75, 100);
         break;
-        //Sonne (7)
-    case 6:
+        //Sonne (8)
+
+     case 9:
+        bar16.ColorWipe(bar16.Color(150, 70, 0), 100);
+            //auch schön bitte behalten
+        break;
+    case 10:
         bar16.Stripes(bar16.Color(120, 40, 60), 10, bar16.Color(0, 50, 125), 10, 200,
             80);
             //schön bitte behalten
         break;
-    case 7:
-        bar16.Stripes(bar16.Color(30, 30, 30), 25, bar16.Color(30, 0, 100), 25, 500,
-            25);
-            //Sturm (3)
-        break;
-     case 8:
-        bar16.ColorWipe(bar16.Color(150, 70, 0), 100);
-            //auch schön bitte behalten
-        break;
-     case 9:
+    case 11:
         bar16.RainbowCycle(100);
-            //auch schön bitte behalten, vllt case 0?
+        //auch schön bitte behalten, vllt case 0?
         break;
     default:
         Serial.println("ERROR");
