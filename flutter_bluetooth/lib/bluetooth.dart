@@ -536,9 +536,7 @@ void generateWeatherData(int button){
                             ),
                             onPressed: () {
                               setState(() {
-                                //getPosition();
-                                _getCurrentLocation();
-                                fetchWeather("https://api.weather.com/v3/wx/forecast/daily/5day?geocode=-33.8469759,150.3715249&format=json&units=e&language=en-US&apiKey=118e3a7a78564ef28e3a7a78560ef2bf");
+                                _sendOnMessageToBluetooth("1");
                                 home = true;
                                 newYork = true;
                                 sydney = true;
@@ -574,7 +572,7 @@ void generateWeatherData(int button){
                             ),
                             onPressed: () {
                               setState(() {
-                                fetchWeather('https://api.weather.com/v2/pws/observations/current?stationId=KNYNEWYO1384&format=json&units=m&apiKey=118e3a7a78564ef28e3a7a78560ef2bf');
+                                _sendOnMessageToBluetooth("3");
                                 home = true;
                                 newYork = true;
                                 sydney = true;
@@ -610,8 +608,7 @@ void generateWeatherData(int button){
                                   : Colors.grey,
                             ),
                             onPressed: () {
-                              print('pressed home');
-                              fetchWeather('https://api.weather.com/v3/wx/forecast/daily/5day?geocode=-33.8469759,150.3715249&format=json&units=e&language=en-US&apiKey=118e3a7a78564ef28e3a7a78560ef2bf');
+                              _sendOnMessageToBluetooth("4");
                               setState(() {
                                 home = true;
                                 newYork = true;
@@ -653,9 +650,7 @@ void generateWeatherData(int button){
                             ),
                             onPressed: () {
                               setState(() {
-                                //getPosition();
-                                _getCurrentLocation();
-                                fetchWeather("https://api.weather.com/v3/wx/forecast/daily/5day?geocode=-33.8469759,150.3715249&format=json&units=e&language=en-US&apiKey=118e3a7a78564ef28e3a7a78560ef2bf");
+                                _sendOnMessageToBluetooth("5");
                                 home = true;
                                 newYork = true;
                                 sydney = true;
@@ -690,7 +685,7 @@ void generateWeatherData(int button){
                             ),
                             onPressed: () {
                               setState(() {
-                                fetchWeather('https://api.weather.com/v2/pws/observations/current?stationId=KNYNEWYO1384&format=json&units=m&apiKey=118e3a7a78564ef28e3a7a78560ef2bf');
+                                _sendOnMessageToBluetooth("8");
                                 home = true;
                                 newYork = true;
                                 sydney = true;
@@ -725,8 +720,7 @@ void generateWeatherData(int button){
                                   : Colors.grey,
                             ),
                             onPressed: () {
-                              print('pressed home');
-                              fetchWeather('https://api.weather.com/v3/wx/forecast/daily/5day?geocode=-33.8469759,150.3715249&format=json&units=e&language=en-US&apiKey=118e3a7a78564ef28e3a7a78560ef2bf');
+                              _sendOnMessageToBluetooth("2");
                               setState(() {
                                 home = true;
                                 newYork = true;
@@ -768,7 +762,7 @@ void generateWeatherData(int button){
                             ),
                             onPressed: () {
                               setState(() {
-                                fetchWeather('https://api.weather.com/v2/pws/observations/current?stationId=KNYNEWYO1384&format=json&units=m&apiKey=118e3a7a78564ef28e3a7a78560ef2bf');
+                                _sendOnMessageToBluetooth("6");
                                 home = true;
                                 newYork = true;
                                 sydney = true;
@@ -803,8 +797,7 @@ void generateWeatherData(int button){
                                   : Colors.grey,
                             ),
                             onPressed: () {
-                              print('pressed home');
-                              fetchWeather('https://api.weather.com/v3/wx/forecast/daily/5day?geocode=-33.8469759,150.3715249&format=json&units=e&language=en-US&apiKey=118e3a7a78564ef28e3a7a78560ef2bf');
+                              _sendOnMessageToBluetooth("7");
                               setState(() {
                                 home = true;
                                 newYork = true;
