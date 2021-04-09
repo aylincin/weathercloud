@@ -6,7 +6,6 @@ import 'dart:convert' as convert;
 import 'package:google_fonts/google_fonts.dart';
 import 'home.dart';
 
-
 // For using PlatformException
 import 'package:flutter/services.dart';
 
@@ -25,10 +24,13 @@ class BluetoothApp extends StatefulWidget {
 class _BluetoothAppState extends State<BluetoothApp> {
   // Initializing the Bluetooth connection state to be unknown
   BluetoothState _bluetoothState = BluetoothState.UNKNOWN;
+
   // Initializing a global key, as it would help us in showing a SnackBar later
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   // Get the instance of the Bluetooth
   FlutterBluetoothSerial _bluetooth = FlutterBluetoothSerial.instance;
+
   // Track the Bluetooth connection with the remote device
   BluetoothConnection connection;
 
@@ -58,6 +60,7 @@ class _BluetoothAppState extends State<BluetoothApp> {
   bool bluesky = true;
   bool snow = true;
   bool cloudy = true;
+
 
   Position _currentPosition;
 
@@ -147,10 +150,8 @@ class _BluetoothAppState extends State<BluetoothApp> {
   }
 
   void _onCloudTapped() {
-    print('PowerButton pressed');
     setState(() {
       power = !power;
-      home = !home;
     });
   }
 
@@ -188,7 +189,7 @@ class _BluetoothAppState extends State<BluetoothApp> {
     });
   }*/
 
-  _getCurrentLocation() async{
+  _getCurrentLocation() async {
     Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
         .then((Position position) {
       setState(() {
@@ -196,27 +197,29 @@ class _BluetoothAppState extends State<BluetoothApp> {
         generateWeatherData(2);
         print(_currentPosition);
       });
-
-
     }).catchError((e) {
       print(e);
     });
   }
 
-void generateWeatherData(int button){
+  Future<void> generateWeatherData(int button) async {
+    print("generateWeather");
     String url;
-    switch(button){
+    switch (button) {
       case 0:
-        url = "https://api.weather.com/v3/wx/forecast/daily/5day?geocode=-33.8469759,150.3715249&format=json&units=e&language=en-US&apiKey=118e3a7a78564ef28e3a7a78560ef2bf";
+        url =
+            "https://api.weather.com/v3/wx/forecast/daily/5day?geocode=-33.8469759,150.3715249&format=json&units=e&language=en-US&apiKey=118e3a7a78564ef28e3a7a78560ef2bf";
         break;
       case 1:
-        url = "https://api.weather.com/v3/wx/forecast/daily/5day?geocode=40.6971494,-74.2598627&format=json&units=e&language=en-US&apiKey=118e3a7a78564ef28e3a7a78560ef2bf";
+        url =
+            "https://api.weather.com/v3/wx/forecast/daily/5day?geocode=40.6971494,-74.2598627&format=json&units=e&language=en-US&apiKey=118e3a7a78564ef28e3a7a78560ef2bf";
         break;
       case 2:
-        if(_currentPosition != null) {
+        if (_currentPosition != null) {
           var longitude = _currentPosition.longitude;
           var latitude = _currentPosition.latitude;
-          url = "https://api.weather.com/v3/wx/forecast/daily/5day?geocode= $longitude,$latitude&format=json&units=e&language=en-US&apiKey=118e3a7a78564ef28e3a7a78560ef2bf";
+          url =
+              "https://api.weather.com/v3/wx/forecast/daily/5day?geocode=$longitude,$latitude&format=json&units=e&language=en-US&apiKey=118e3a7a78564ef28e3a7a78560ef2bf";
         } else {
           _getCurrentLocation();
         }
@@ -225,27 +228,65 @@ void generateWeatherData(int button){
         break;
     }
 
-    if(url != null) {
-      Future<int> tmpIconCode = fetchWeather(url);
-      if(tmpIconCode == 3  || tmpIconCode == 4 || tmpIconCode == 37 || tmpIconCode == 38 || tmpIconCode == 47){
+    if (!url.isEmpty) {
+      int tmpIconCode = await fetchWeather(url);
+      print("Weather Code: $tmpIconCode");
+      if (tmpIconCode == 3 ||
+          tmpIconCode == 4 ||
+          tmpIconCode == 37 ||
+          tmpIconCode == 38 ||
+          tmpIconCode == 47) {
         //Gewitter
         _sendOnMessageToBluetooth("1");
-      } else if(tmpIconCode == 31 || tmpIconCode == 32 || tmpIconCode == 33 || tmpIconCode == 34 || tmpIconCode == 23 || tmpIconCode == 24){
+      } else if (tmpIconCode == 31 ||
+          tmpIconCode == 32 ||
+          tmpIconCode == 33 ||
+          tmpIconCode == 34 ||
+          tmpIconCode == 23 ||
+          tmpIconCode == 24) {
         //Blauer Himmel
         _sendOnMessageToBluetooth("2");
-      } else if(tmpIconCode == 0 || tmpIconCode == 1 || tmpIconCode == 2){
+      } else if (tmpIconCode == 0 || tmpIconCode == 1 || tmpIconCode == 2) {
         //Sturm
         _sendOnMessageToBluetooth("3");
-      } else if(tmpIconCode == 19 || tmpIconCode == 20 || tmpIconCode == 21 || tmpIconCode == 22){
+      } else if (tmpIconCode == 19 ||
+          tmpIconCode == 20 ||
+          tmpIconCode == 21 ||
+          tmpIconCode == 22) {
         //Nebel
         _sendOnMessageToBluetooth("4");
-      } else if(tmpIconCode == 5 || tmpIconCode == 6 || tmpIconCode == 7|| tmpIconCode == 8 || tmpIconCode == 9 || tmpIconCode == 10 || tmpIconCode == 11 || tmpIconCode == 12 || tmpIconCode == 35 || tmpIconCode == 39 || tmpIconCode == 40 || tmpIconCode == 45) {
+      } else if (tmpIconCode == 5 ||
+          tmpIconCode == 6 ||
+          tmpIconCode == 7 ||
+          tmpIconCode == 8 ||
+          tmpIconCode == 9 ||
+          tmpIconCode == 10 ||
+          tmpIconCode == 11 ||
+          tmpIconCode == 12 ||
+          tmpIconCode == 35 ||
+          tmpIconCode == 39 ||
+          tmpIconCode == 40 ||
+          tmpIconCode == 45) {
         //Regen
         _sendOnMessageToBluetooth("5");
-      } else if(tmpIconCode == 13 || tmpIconCode == 14 || tmpIconCode == 15 || tmpIconCode == 16 || tmpIconCode == 17 || tmpIconCode == 18 || tmpIconCode == 25 || tmpIconCode == 41 || tmpIconCode == 42 || tmpIconCode == 43 || tmpIconCode == 46) {
+      } else if (tmpIconCode == 13 ||
+          tmpIconCode == 14 ||
+          tmpIconCode == 15 ||
+          tmpIconCode == 16 ||
+          tmpIconCode == 17 ||
+          tmpIconCode == 18 ||
+          tmpIconCode == 25 ||
+          tmpIconCode == 41 ||
+          tmpIconCode == 42 ||
+          tmpIconCode == 43 ||
+          tmpIconCode == 46) {
         //Schnee
         _sendOnMessageToBluetooth("6");
-      } else if (tmpIconCode == 26 || tmpIconCode == 27 || tmpIconCode == 28 || tmpIconCode == 29 || tmpIconCode == 30){
+      } else if (tmpIconCode == 26 ||
+          tmpIconCode == 27 ||
+          tmpIconCode == 28 ||
+          tmpIconCode == 29 ||
+          tmpIconCode == 30) {
         //Wolkig
         _sendOnMessageToBluetooth("7");
       } else if (tmpIconCode == 32 || tmpIconCode == 36) {
@@ -255,8 +296,7 @@ void generateWeatherData(int button){
         _sendOnMessageToBluetooth("0");
       }
     }
-}
-
+  }
 
   Future<int> fetchWeather(var url) async {
     // Await the http get response, then decode the json-formatted response.
@@ -267,11 +307,10 @@ void generateWeatherData(int button){
       var dayObject = itemCount[0];
       var iconCode = dayObject['iconCode'];
 
-      if(iconCode[0] != null){
+      if (iconCode[0] != null) {
         print(int.parse(iconCode[0].toString()));
         return int.parse(iconCode[0].toString());
-      }
-      else {
+      } else {
         print(int.parse(iconCode[1].toString()));
         return int.parse(iconCode[1].toString());
       }
@@ -332,9 +371,9 @@ void generateWeatherData(int button){
   // Method to show a Snackbar,
   // taking message as the text
   Future show(
-      String message, {
-        Duration duration: const Duration(seconds: 3),
-      }) async {
+    String message, {
+    Duration duration: const Duration(seconds: 3),
+  }) async {
     await new Future.delayed(new Duration(milliseconds: 100));
     _scaffoldKey.currentState.showSnackBar(
       new SnackBar(
@@ -345,12 +384,27 @@ void generateWeatherData(int button){
       ),
     );
   }
+  
+  
+  void setTrue() {
+    home = true;
+    sydney = true;
+    newYork = true;
+    storm = true;
+    thunder = true;
+    fog = true;
+    sun = true;
+    bluesky = true;
+    snow = true;
+    cloudy = true;
+    rain = true;
+  }
 
   // Now, its time to build the UI
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme:  ThemeData(
+      theme: ThemeData(
         textTheme: GoogleFonts.montserratTextTheme(
           Theme.of(context).textTheme,
         ),
@@ -359,474 +413,50 @@ void generateWeatherData(int button){
         key: _scaffoldKey,
         body: Center(
             child: Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: AssetImage("images/app_background.png")
-                ),
-              ),
-              child: Column(
-                children: <Widget>[
-                  IconButton(
-                      icon: power
-                          ? new Image.asset('images/buttons/unpressed_cloud.png')
-                          : new Image.asset('images/buttons/pressed_cloud.png'),
-                      iconSize: 250,
-                      padding: EdgeInsets.only(
-                          top: 15.0, bottom: 0.0, left: 60.0, right: 60.0),
-                      onPressed: () {
-                        _onCloudTapped();
-                        if(!_connected) {
-                          _sendOffMessageToBluetooth();
-                          _connected = true;
-                        } else {
-                          _sendOnMessageToBluetooth("0");
-                          _connected = false;
-                        }
+          decoration: BoxDecoration(
+            image: DecorationImage(
+                fit: BoxFit.cover,
+                image: AssetImage("images/app_background.png")),
+          ),
+          child: Column(
+            children: <Widget>[
+              IconButton(
+                  icon: power
+                      ? new Image.asset('images/buttons/unpressed_cloud.png')
+                      : new Image.asset('images/buttons/pressed_cloud.png'),
+                  iconSize: 180,
+                  padding: EdgeInsets.only(top: 30.0),
+                  onPressed: () {
+                    _onCloudTapped();
+                    if (!_connected) {
+                      _sendOffMessageToBluetooth();
+                      _connected = true;
+                    } else {
+                      _sendOnMessageToBluetooth("0");
+                      _connected = false;
+                    }
 
-                        print(power);
-                        print(_connected);
-                        if (power == true && _connected == true) {
-                          print("Connected");
-                          home = true;
-                          sydney = true;
-                          newYork = true;
-                        } else {
-                          print("Not connected");
-                        }
-                      }),
-                  new Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: new SizedBox(
-                          height: 40,
-                          width: 80,
-                          child: TextButton(
-                            child: Text('HOME'),
-                            style: TextButton.styleFrom(
-                              backgroundColor: home
-                                  ? Colors.transparent
-                                  : Colors.white,
-                              primary: home
-                                  ? Colors.white
-                                  : Colors.grey,
-                            ),
-                            onPressed: () {
-                              print('pressed home');
-                              setState(() {
-                                //getPosition();
-                                _getCurrentLocation();
-                                fetchWeather("https://api.weather.com/v3/wx/forecast/daily/5day?geocode=-33.8469759,150.3715249&format=json&units=e&language=en-US&apiKey=118e3a7a78564ef28e3a7a78560ef2bf");
-                                sydney = true;
-                                newYork = true;
-                                storm = true;
-                                thunder = true;
-                                fog = true;
-                                sun = true;
-                                bluesky = true;
-                                snow = true;
-                                cloudy = true;
-                                rain = true;
-
-                                home = !home;
-                              });
-                            },
-                          ),
-                        ),
-                      ),
-                      Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: new SizedBox(
-                            height: 40,
-                            width: 90,
-                            child: TextButton(
-                              child: Text('NEW YORK'),
-                              style: TextButton.styleFrom(
-                                backgroundColor: newYork
-                                    ? Colors.transparent
-                                    : Colors.white,
-                                primary: newYork
-                                    ? Colors.white
-                                    : Colors.grey,
-                              ),
-                              onPressed: () {
-                                print('pressed home');
-                                setState(() {
-                                  fetchWeather('https://api.weather.com/v2/pws/observations/current?stationId=KNYNEWYO1384&format=json&units=m&apiKey=118e3a7a78564ef28e3a7a78560ef2bf');
-                                  home = true;
-                                  sydney = true;
-                                  storm = true;
-                                  thunder = true;
-                                  fog = true;
-                                  sun = true;
-                                  bluesky = true;
-                                  snow = true;
-                                  cloudy = true;
-                                  rain = true;
-
-                                  newYork = !newYork;
-                                });
-                              },
-                            ),
-                          ),
-                      ),
-
-                      Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: new SizedBox(
-                            height: 40,
-                            width: 80,
-                            child: TextButton(
-                              child: Text('SYDNEY'),
-                              style: TextButton.styleFrom(
-                                backgroundColor: sydney
-                                    ? Colors.transparent
-                                    : Colors.white,
-                                primary: sydney
-                                    ? Colors.white
-                                    : Colors.grey,
-                              ),
-                              onPressed: () {
-                                print('pressed home');
-                                fetchWeather('https://api.weather.com/v3/wx/forecast/daily/5day?geocode=-33.8469759,150.3715249&format=json&units=e&language=en-US&apiKey=118e3a7a78564ef28e3a7a78560ef2bf');
-                                setState(() {
-                                  home = true;
-                                  newYork = true;
-                                  storm = true;
-                                  thunder = true;
-                                  fog = true;
-                                  sun = true;
-                                  bluesky = true;
-                                  snow = true;
-                                  cloudy = true;
-                                  rain = true;
-
-                                  sydney = !sydney;
-                                });
-                              },
-                            ),
-                          ),
-                      ),
-
-                    ],
-                  ),
+                    if (power == true && _connected == true) {
+                      print("Connected");
+                      setTrue();
+                    } else {
+                      print("Not connected");
+                    }
+                  }),
+              Column(
+                children: [
                   Padding(
-                    padding: EdgeInsets.only(top: 20.0),
-                    child: new Text('MODI', style: TextStyle(color: Colors.white, fontSize: 20.0, fontWeight: FontWeight.bold)),
-                  ),
-                  new Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: new SizedBox(
-                          height: 40,
-                          width: 80,
-                          child: TextButton(
-                            child: Text('THUNDER'),
-                            style: TextButton.styleFrom(
-                              backgroundColor: thunder
-                                  ? Colors.transparent
-                                  : Colors.white,
-                              primary: thunder
-                                  ? Colors.white
-                                  : Colors.grey,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _sendOnMessageToBluetooth("1");
-                                home = true;
-                                newYork = true;
-                                sydney = true;
-                                storm = true;
-                                fog = true;
-                                rain = true;
-                                sun = true;
-                                bluesky = true;
-                                snow = true;
-                                cloudy = true;
-
-
-                                thunder = !thunder;
-                              });
-                            },
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: new SizedBox(
-                          height: 40,
-                          width: 90,
-                          child: TextButton(
-                            child: Text('STORM'),
-                            style: TextButton.styleFrom(
-                              backgroundColor: storm
-                                  ? Colors.transparent
-                                  : Colors.white,
-                              primary: storm
-                                  ? Colors.white
-                                  : Colors.grey,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _sendOnMessageToBluetooth("3");
-                                home = true;
-                                newYork = true;
-                                sydney = true;
-                                thunder = true;
-                                fog = true;
-                                rain = true;
-                                sun = true;
-                                bluesky = true;
-                                snow = true;
-                                cloudy = true;
-
-
-                                storm = !storm;
-                              });
-                            },
-                          ),
-                        ),
-                      ),
-
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: new SizedBox(
-                          height: 40,
-                          width: 80,
-                          child: TextButton(
-                            child: Text('FOG'),
-                            style: TextButton.styleFrom(
-                              backgroundColor: fog
-                                  ? Colors.transparent
-                                  : Colors.white,
-                              primary: fog
-                                  ? Colors.white
-                                  : Colors.grey,
-                            ),
-                            onPressed: () {
-                              _sendOnMessageToBluetooth("4");
-                              setState(() {
-                                home = true;
-                                newYork = true;
-                                sydney = true;
-                                storm = true;
-                                thunder = true;
-                                rain = true;
-                                sun = true;
-                                bluesky = true;
-                                snow = true;
-                                cloudy = true;
-
-                                fog = !fog;
-                              });
-                            },
-                          ),
-                        ),
-                      ),
-
-                    ],
-                  ),
-                  new Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: new SizedBox(
-                          height: 40,
-                          width: 80,
-                          child: TextButton(
-                            child: Text('RAIN'),
-                            style: TextButton.styleFrom(
-                              backgroundColor: rain
-                                  ? Colors.transparent
-                                  : Colors.white,
-                              primary: rain
-                                  ? Colors.white
-                                  : Colors.grey,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _sendOnMessageToBluetooth("5");
-                                home = true;
-                                newYork = true;
-                                sydney = true;
-                                storm = true;
-                                thunder = true;
-                                fog = true;
-                                sun = true;
-                                bluesky = true;
-                                snow = true;
-                                cloudy = true;
-
-                                rain = !rain;
-                              });
-                            },
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: new SizedBox(
-                          height: 40,
-                          width: 90,
-                          child: TextButton(
-                            child: Text('SUN'),
-                            style: TextButton.styleFrom(
-                              backgroundColor: sun
-                                  ? Colors.transparent
-                                  : Colors.white,
-                              primary: sun
-                                  ? Colors.white
-                                  : Colors.grey,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _sendOnMessageToBluetooth("8");
-                                home = true;
-                                newYork = true;
-                                sydney = true;
-                                storm = true;
-                                thunder = true;
-                                fog = true;
-                                rain = true;
-                                bluesky = true;
-                                snow = true;
-                                cloudy = true;
-
-                                sun = !sun;
-                              });
-                            },
-                          ),
-                        ),
-                      ),
-
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: new SizedBox(
-                          height: 40,
-                          width: 80,
-                          child: TextButton(
-                            child: Text('BLUE SKY'),
-                            style: TextButton.styleFrom(
-                              backgroundColor: bluesky
-                                  ? Colors.transparent
-                                  : Colors.white,
-                              primary: bluesky
-                                  ? Colors.white
-                                  : Colors.grey,
-                            ),
-                            onPressed: () {
-                              _sendOnMessageToBluetooth("2");
-                              setState(() {
-                                home = true;
-                                newYork = true;
-                                sydney = true;
-                                storm = true;
-                                thunder = true;
-                                fog = true;
-                                sun = true;
-                                rain = true;
-                                snow = true;
-                                cloudy = true;
-
-                                bluesky = !bluesky;
-                              });
-                            },
-                          ),
-                        ),
-                      ),
-
-                    ],
-                  ),
-                  new Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: new SizedBox(
-                          height: 40,
-                          width: 90,
-                          child: TextButton(
-                            child: Text('SNOW'),
-                            style: TextButton.styleFrom(
-                              backgroundColor: snow
-                                  ? Colors.transparent
-                                  : Colors.white,
-                              primary: snow
-                                  ? Colors.white
-                                  : Colors.grey,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _sendOnMessageToBluetooth("6");
-                                home = true;
-                                newYork = true;
-                                sydney = true;
-                                storm = true;
-                                thunder = true;
-                                fog = true;
-                                sun = true;
-                                bluesky = true;
-                                rain = true;
-                                cloudy = true;
-
-                                snow = !snow;
-                              });
-                            },
-                          ),
-                        ),
-                      ),
-
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: new SizedBox(
-                          height: 40,
-                          width: 80,
-                          child: TextButton(
-                            child: Text('CLOUDY'),
-                            style: TextButton.styleFrom(
-                              backgroundColor: cloudy
-                                  ? Colors.transparent
-                                  : Colors.white,
-                              primary: cloudy
-                                  ? Colors.white
-                                  : Colors.grey,
-                            ),
-                            onPressed: () {
-                              _sendOnMessageToBluetooth("7");
-                              setState(() {
-                                home = true;
-                                newYork = true;
-                                sydney = true;
-                                storm = true;
-                                thunder = true;
-                                fog = true;
-                                sun = true;
-                                bluesky = true;
-                                snow = true;
-                                rain = true;
-
-                                cloudy = !cloudy;
-                              });
-                            },
-                          ),
-                        ),
-                      ),
-
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10.0, top: 30.0, right: 5.0, bottom: 0.0),
+                    padding: const EdgeInsets.only(
+                        left: 25.0, top: 0.0, right: 10.0, bottom: 0.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          'CONNECT TO ARDUINO CLOUD',
-                          style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white),
+                          'CONNECT TO YOUR CLOUD',
+                          style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
                           textAlign: TextAlign.left,
                           softWrap: true,
                         )
@@ -834,7 +464,8 @@ void generateWeatherData(int button){
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 30.0, top: 5.0, right: 35.0, bottom: 0.0),
+                    padding: const EdgeInsets.only(
+                        left: 30.0, top: 5.0, right: 35.0, bottom: 0.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
@@ -868,6 +499,7 @@ void generateWeatherData(int button){
                               setState(() {});
                             });
                           },
+                          activeColor: Colors.white,
                         )
                       ],
                     ),
@@ -878,47 +510,53 @@ void generateWeatherData(int button){
                         //mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           Padding(
-                            padding: const EdgeInsets.only(left: 30.0, top: 5.0, right: 30.0, bottom: 10.0),
+                            padding: const EdgeInsets.only(
+                                left: 30.0, top: 5.0, right: 30.0, bottom: 10.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Text(
                                   'Device:',
-                                  style: TextStyle(fontSize: 14, color: Colors.white),
+                                  style:
+                                  TextStyle(fontSize: 14, color: Colors.white),
                                 ),
                                 DropdownButton(
                                   items: _getDeviceItems(),
+                                  style: TextStyle(color: Colors.white),
                                   onChanged: (value) =>
                                       setState(() => _device = value),
                                   value: _devicesList.isNotEmpty ? _device : null,
+                                  dropdownColor: Colors.black,
                                 ),
                               ],
                             ),
                           ),
-                          new Column(
-                              children: [
-                                Padding(padding: EdgeInsets.all(5.0)),
-                                new SizedBox(
-                                  height: 40,
-                                  width: 300,
-                                  child: RaisedButton(
-                                    color: Colors.transparent,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.zero,
-                                        side: BorderSide(color: Colors.white, width: 2)
-                                    ),
-                                    onPressed: _isButtonUnavailable
-                                        ? null
-                                        : _connected ? _disconnect : _connect,
-                                    child:
-                                    Text(
-                                      _connected ? 'DISCONNECT' : 'CONNECT',
-                                      style: TextStyle(fontSize: 14, color: Colors.white),
-                                    ),
-                                  ),
-                                )
-                              ]
-                          ),
+                          new Column(children: [
+                            Padding(padding: EdgeInsets.only(bottom: 35.0),
+                              child: new SizedBox(
+                              height: 40,
+                              width: 300,
+                              child: RaisedButton(
+                                color: Colors.transparent,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.zero,
+                                    side:
+                                    BorderSide(color: Colors.white, width: 2)),
+                                onPressed: _isButtonUnavailable
+                                    ? null
+                                    : _connected
+                                    ? _disconnect
+                                    : _connect,
+                                child: Text(
+                                  _connected ? 'DISCONNECT' : 'CONNECT',
+                                  style:
+                                  TextStyle(fontSize: 14, color: Colors.white),
+                                ),
+                              ),
+                            )
+                              ,),
+
+                          ]),
                           // FlatButton(
                           // onPressed: _connected
                           //  ? sendOnMessageToBluetooth
@@ -931,15 +569,317 @@ void generateWeatherData(int button){
                           // : null,
                           // child: Text("OFF"),
                           // ),
-
                         ],
                       ),
                     ],
                   ),
                 ],
               ),
-            )
-        ),
+              new Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: new SizedBox(
+                      height: 40,
+                      width: 95,
+                      child: TextButton(
+                        child: Text('HOME', style: TextStyle(fontSize: 16.0)),
+                        style: TextButton.styleFrom(
+                          backgroundColor:
+                              home ? Colors.transparent : Colors.white,
+                          primary:  home ? Colors.white : Colors.grey,
+                        ),
+                        onPressed: () {
+                          print('pressed home');
+                          setState(() {
+                            if(power == false) {
+                              generateWeatherData(2);
+                              setTrue();
+                              home = false;
+                            }
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: new SizedBox(
+                      height: 40,
+                      width: 120,
+                      child: TextButton(
+                        child: Text('NEW YORK', style: TextStyle(fontSize: 16.0)),
+                        style: TextButton.styleFrom(
+                          backgroundColor:
+                              newYork ? Colors.transparent : Colors.white,
+                          primary: newYork ? Colors.white : Colors.grey,
+                        ),
+                        onPressed: () {
+                          print('pressed new york');
+                          setState(() {
+                            if(power == false) {
+                              generateWeatherData(0);
+                              setTrue();
+                              newYork = false;
+                            }
+
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: new SizedBox(
+                      height: 40,
+                      width: 95,
+                      child: TextButton(
+                        child: Text('SYDNEY', style: TextStyle(fontSize: 16.0)),
+                        style: TextButton.styleFrom(
+                          backgroundColor:
+                              sydney ? Colors.transparent : Colors.white,
+                          primary: sydney ? Colors.white : Colors.grey,
+                        ),
+                        onPressed: () {
+                          print('pressed sydney');
+
+                          setState(() {
+                            if(power == false ) {
+                              generateWeatherData(1);
+                              setTrue();
+                              sydney = false;
+                            }
+
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              /*Padding(
+                    padding: EdgeInsets.only(top: 20.0),
+                    child: new Text('MODI', style: TextStyle(color: Colors.white, fontSize: 20.0, fontWeight: FontWeight.bold)),
+                  ),*/
+              new SizedBox(height: 15.0),
+              new Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: new SizedBox(
+                      height: 40,
+                      width: 90,
+                      child: TextButton(
+                        child: Text('THUNDER'),
+                        style: TextButton.styleFrom(
+                          backgroundColor:
+                              thunder ? Colors.transparent : Colors.white,
+                          primary: thunder ? Colors.white : Colors.grey,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            if(power == false) {
+                              _sendOnMessageToBluetooth("1");
+                              setTrue();
+                              thunder = false;
+                            }
+
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: new SizedBox(
+                      height: 40,
+                      width: 90,
+                      child: TextButton(
+                        child: Text('STORM'),
+                        style: TextButton.styleFrom(
+                          backgroundColor:
+                              storm ? Colors.transparent : Colors.white,
+                          primary: storm ? Colors.white : Colors.grey,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            if(power == false) {
+                              _sendOnMessageToBluetooth("3");
+                              setTrue();
+                              storm = false;
+                            }
+
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: new SizedBox(
+                      height: 40,
+                      width: 80,
+                      child: TextButton(
+                        child: Text('FOG'),
+                        style: TextButton.styleFrom(
+                          backgroundColor:
+                              fog ? Colors.transparent : Colors.white,
+                          primary: fog ? Colors.white : Colors.grey,
+                        ),
+                        onPressed: () {
+                            setState(() {
+                              if(power == false) {
+                                _sendOnMessageToBluetooth("4");
+                                setTrue();
+                                fog = false;
+                          }
+
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              new Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: new SizedBox(
+                      height: 40,
+                      width: 80,
+                      child: TextButton(
+                        child: Text('RAIN'),
+                        style: TextButton.styleFrom(
+                          backgroundColor:
+                              rain ? Colors.transparent : Colors.white,
+                          primary: rain ? Colors.white : Colors.grey,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            if(power == false ) {
+                              _sendOnMessageToBluetooth("5");
+                              setTrue();
+                              rain = false;
+                            }
+
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: new SizedBox(
+                      height: 40,
+                      width: 90,
+                      child: TextButton(
+                        child: Text('SUN'),
+                        style: TextButton.styleFrom(
+                          backgroundColor:
+                              sun ? Colors.transparent : Colors.white,
+                          primary: sun ? Colors.white : Colors.grey,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            if(power == false) {
+                              _sendOnMessageToBluetooth("8");
+                              setTrue();
+                              sun = false;
+                            }
+
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: new SizedBox(
+                      height: 40,
+                      width: 90,
+                      child: TextButton(
+                        child: Text('BLUE SKY'),
+                        style: TextButton.styleFrom(
+                          backgroundColor:
+                              bluesky ? Colors.transparent : Colors.white,
+                          primary: bluesky ? Colors.white : Colors.grey,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            if(power == false) {
+                              _sendOnMessageToBluetooth("2");
+                              setTrue();
+                              bluesky = false;
+                            }
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              new Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: new SizedBox(
+                      height: 40,
+                      width: 90,
+                      child: TextButton(
+                        child: Text('SNOW'),
+                        style: TextButton.styleFrom(
+                          backgroundColor:
+                              snow ? Colors.transparent : Colors.white,
+                          primary: snow ? Colors.white : Colors.grey,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            if(power == false) {
+                              _sendOnMessageToBluetooth("6");
+                              setTrue();
+                              snow = false;
+                            }
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: new SizedBox(
+                      height: 40,
+                      width: 80,
+                      child: TextButton(
+                        child: Text('CLOUDY'),
+                        style: TextButton.styleFrom(
+                          backgroundColor:
+                              cloudy ? Colors.transparent : Colors.white,
+                          primary: cloudy ? Colors.white : Colors.grey,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            if(power == false) {
+                              _sendOnMessageToBluetooth("7");
+                              setTrue();
+                              cloudy = false;
+                            }
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+
+            ],
+          ),
+        )),
       ),
     );
   }
@@ -1005,32 +945,32 @@ void generateWeatherData(int button){
     }
   }
 
-  // void _onDataReceived(Uint8List data) {
-  //   // Allocate buffer for parsed data
-  //   int backspacesCounter = 0;
-  //   data.forEach((byte) {
-  //     if (byte == 8 || byte == 127) {
-  //       backspacesCounter++;
-  //     }
-  //   });
-  //   Uint8List buffer = Uint8List(data.length - backspacesCounter);
-  //   int bufferIndex = buffer.length;
+// void _onDataReceived(Uint8List data) {
+//   // Allocate buffer for parsed data
+//   int backspacesCounter = 0;
+//   data.forEach((byte) {
+//     if (byte == 8 || byte == 127) {
+//       backspacesCounter++;
+//     }
+//   });
+//   Uint8List buffer = Uint8List(data.length - backspacesCounter);
+//   int bufferIndex = buffer.length;
 
-  //   // Apply backspace control character
-  //   backspacesCounter = 0;
-  //   for (int i = data.length - 1; i >= 0; i--) {
-  //     if (data[i] == 8 || data[i] == 127) {
-  //       backspacesCounter++;
-  //     } else {
-  //       if (backspacesCounter > 0) {
-  //         backspacesCounter--;
-  //       } else {
-  //         buffer[--bufferIndex] = data[i];
-  //       }
-  //     }
-  //   }
-  // }
+//   // Apply backspace control character
+//   backspacesCounter = 0;
+//   for (int i = data.length - 1; i >= 0; i--) {
+//     if (data[i] == 8 || data[i] == 127) {
+//       backspacesCounter++;
+//     } else {
+//       if (backspacesCounter > 0) {
+//         backspacesCounter--;
+//       } else {
+//         buffer[--bufferIndex] = data[i];
+//       }
+//     }
+//   }
+// }
 
-  // Method to disconnect bluetooth
+// Method to disconnect bluetooth
 
 }
