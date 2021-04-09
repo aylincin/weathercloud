@@ -346,7 +346,7 @@ class _BluetoothAppState extends State<BluetoothApp> {
 
     connection.output.add(utf8.encode(weatherCode + "\r\n"));
     await connection.output.allSent;
-    show('Device Turned On');
+    //show('Device Turned On');
     print("Onmessage to bluetooth");
     setState(() {
       _deviceState = 1; // device on
@@ -361,7 +361,7 @@ class _BluetoothAppState extends State<BluetoothApp> {
 
     connection.output.add(utf8.encode("0" + "\r\n"));
     await connection.output.allSent;
-    show('Device Turned Off');
+    //show('Device Turned Off');
     print("Offmessage to bluetooth");
     setState(() {
       _deviceState = -1; // device off

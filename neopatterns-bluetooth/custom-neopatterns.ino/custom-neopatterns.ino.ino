@@ -153,7 +153,6 @@ void UserPattern1(NeoPatterns *aNeoPatterns, color32_t aPixelColor, color32_t aB
     aNeoPatterns->show();
     aNeoPatterns->lastUpdate = millis();
 }
-
 /*
  * @return - true if pattern has ended, false if pattern has NOT ended
  */
@@ -281,6 +280,7 @@ void UserPattern2(NeoPatterns *aNeoPatterns, color32_t aColor, uint16_t aInterva
     /*
      * Sample implementation not supporting DIRECTION_DOWN
      */
+    aNeoPatterns->ActivePattern = PATTERN_USER_PATTERN2;
     aNeoPatterns->Interval = aIntervalMillis;
     aNeoPatterns->Color1 = aColor;
     aNeoPatterns->Direction = aDirection;
@@ -327,6 +327,7 @@ void UserPattern3(NeoPatterns *aNeoPatterns, color32_t aColor, uint16_t aInterva
     /*
      * Sample implementation not supporting DIRECTION_DOWN
      */
+    aNeoPatterns->ActivePattern = PATTERN_USER_PATTERN3;
     aNeoPatterns->Interval = aIntervalMillis;
     aNeoPatterns->Color1 = aColor;
     aNeoPatterns->Direction = aDirection;
@@ -352,7 +353,7 @@ bool UserPattern3Update(NeoPatterns *aNeoPatterns, bool aDoUpdate) {
        bar16.setPixelColor(random(150),50,50,50);
       }
       else{
-        bar16.setPixelColor(random(150),15, 15, 100);
+        bar16.setPixelColor(random(150),20, 20, 20);
       }
       bar16.show();
     }
