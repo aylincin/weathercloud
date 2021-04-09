@@ -1,0 +1,1 @@
+../../../../.symlinks/plugins/flutter_bluetooth_serial/ios/Classes/FlutterBluetoothSerialPlugin.h

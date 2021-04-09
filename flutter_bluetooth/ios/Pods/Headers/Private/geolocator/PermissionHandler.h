@@ -1,0 +1,1 @@
+../../../../.symlinks/plugins/geolocator/ios/Classes/Handlers/PermissionHandler.h
