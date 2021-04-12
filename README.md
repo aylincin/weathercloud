@@ -28,7 +28,7 @@ Hier einfach die drei Bilder der App (wie in der Präsentation einfügen)
 The following contains a list of materials (hardware and software) as well as instructions to build a weathercloud.
 
 **Materials:**
-- Bastelwatte (hab noch kein englisches Äquivalent zu Bastelwatte gefunden)
+- Cotton for handicrafts
 - Rabbit wires
 
 **Hardware:**
@@ -58,29 +58,28 @@ Flutter SDK ([Windows](https://flutter.dev/docs/get-started/install/windows), [m
 7. Run the project on your phone
 
 ### WHY FLUTTER?
-- Hier kurz Erklären warum Flutter benutzt wurde, kann aber wahrscheinlich auch raus. Da würde wohl eh nicht so viel stehen
+- We used Google's UI toolkit Flutter for building our app. With Flutter you can deploy your application on Android and iOS mobile phones.
 
 ## ISSUES
-- Hier kurz auf Probleme bei Entwicklung eingehen
-  - Limitierungen Flutter
+- During the development process we experienced some problems.
+  - It was rather complicated to use the bluetooth functionality in linked pages, so we created a single-paged application for now to control all funcitonalities.
   - Probleme Arduino
-  - Limiterungen Farbspektrum
+  - We weren't able top visualise all colors with the LED stirp due to lighting limitations. 
 
-## WEITERENTWICKLUNG
-Due to the limited time of the project, there are still a number of options for further development that should be considered. Basically, this optiones for improvement can be divided into three different areas: the cloud itself, functionality, app design.
+## SUBSEQUENT DEVELOPMENT
+Due to the limited time of the project, there are still a number of options for further development that should be considered. Basically, this options for improvement can be divided into three different areas: the cloud itself, functionality, app design.
 
-**Wolke:**
-- Bessere Lichtverteilung durch größere oder mehrere LED strips in einer Wolke
-- Diffuses Licht für stärkere Atmosphäre
-- Stabilität der Wolken
-- Dauerhafte Stromquelle (eventuell über Kippschalter steuerbar)
+**Cloud:**
+- When using more or bigger LED stripes, the light distribution could be enhanced
+- Diffused light would create a more intense atmosphere, which for example can be realised by optimising the could through using more cotton
+- It is important to take the stability of the could into account, since it will be mounted on the ceiling. The rabbit wire should be fixed with additional wire and the cotton can be fixated into position with hair spray. 
+- A consistent power source should be provided (which could be redulated with a flip switch)
 
-**Funktionalität:**
-- Kompatibilität mehrerer Wolken (Steuerbar über ein Gerät)
-- Detailliertere Farbschemen
-- Kleinere "Wettergruppen", also mehr Auswahl
-- Suchfunktion, wie bei einer Wetterapp, nach beliebigem Standort
-
+**Functionality:**
+- Compatibility of multiple clouds (controllable via one device)
+- More detailed color schemes
+- Smaller "weather groups" to provide more choices
+- Search function for any location, like a weather app
 
 **App-Design:**
 - Responsive design
