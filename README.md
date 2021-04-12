@@ -7,7 +7,7 @@ The cloud can be used in both, private and corporate, contexts. The impressive t
 Since the cloud can theoretically visualize any weather situation, it is also suitable for any mood and can be adapted to the appropriate occasion or the desired atmosphere. For this purpose, other color schemes can also be added as desired.
 
 ## THE WEATHER
-To access live weather data, the API of [wunderground.com](https://www.wunderground.com/) was used. For this, the various icon codes of [*The Weather Company*](https://docs.google.com/document/d/1qpc4QN3YDpGDGGNYVINh7tfeulcZ4fxPSC5f4KzpR_U/edit) of the weather types were considered and clustered. This resulted in a total of **8** superordinate weather groupings, which were visualized by different colors and animations:
+To access live weather data, the API of [wunderground.com](https://www.wunderground.com/) was used. For this, the various icon codes of [*The Weather Company*](https://docs.google.com/document/d/1qpc4QN3YDpGDGGNYVINh7tfeulcZ4fxPSC5f4KzpR_U/edit) of the weather types were considered and clustered. This resulted in a total of **8** groups, which were visualized by different colors and animations:
 
 - Thunderstorm
 - Blue Sky
@@ -21,18 +21,44 @@ To access live weather data, the API of [wunderground.com](https://www.wundergro
 *Please note:*
 The different colors to display the weather were chosen according to personal favor.
 
-## HOW TO BUILD THE WEATHERCLOUD
-- Hier Bastelanleitung und Materialliste
-
 ## THE APP
-- Hier Bilder der App einfügen und kurz die Funktionen erkären
+Hier einfach die drei Bilder der App (wie in der Präsentation einfügen)
+
+## HOW TO BUILD THE WEATHERCLOUD
+The following contains a list of materials (hardware and software) as well as instructions to build a weathercloud.
+
+**Materials:**
+- Bastelwatte (hab noch kein englisches Äquivalent zu Bastelwatte gefunden)
+- Rabbit wires
+
+**Hardware:**
+- Arduino (e.g. Nano)
+- Bluetooth module (for Android: HC-05, for iOS: AC09)
+- WS2812B LED strip
+- Soldering iron
+
+**Software:**
+Arduino IDE ([Windows](https://www.arduino.cc/en/guide/windows#toc1), [macOS](https://www.arduino.cc/en/guide/macOSX)
+Android Studio ([Windows and Mac](https://developer.android.com/studio#downloads))
+Flutter SDK ([Windows](https://flutter.dev/docs/get-started/install/windows), [macOS](https://flutter.dev/docs/get-started/install/macos))
+
+**Instructions**
+*Corpus:*
+1. With rabbit wires, form the corpus of the cloud as desired
+2. Erst Löten oder?
+3. Wrap the LED strip around the corpus as desired. Attach the strip with wires to the corpus
+
+*Functionality:*
+1. Install the needed software
+2. Clone the repository
+3. Connect the arduino to your computer
+4. Upload the custom-neopatterns.ino.ino file to your arduino
+5. Disconnect your Arduino from your computer and apply it to the cloud
+6. Open the project in Android Studio and connect your phone to your computer
+7. Run the project on your phone
 
 ### WHY FLUTTER?
-- Hier kurz Erklären warum Flutter benutzt wurde
-
-### INSTALLATION GUIDE
-- Hier erklären (auch wie Repo geklont wird)
-- Welche Software braucht man dafür?
+- Hier kurz Erklären warum Flutter benutzt wurde, kann aber wahrscheinlich auch raus. Da würde wohl eh nicht so viel stehen
 
 ## ISSUES
 - Hier kurz auf Probleme bei Entwicklung eingehen
@@ -41,4 +67,24 @@ The different colors to display the weather were chosen according to personal fa
   - Limiterungen Farbspektrum
 
 ## WEITERENTWICKLUNG
-Wie kann die App weiterentwickelt und immer weiter verbessert werden?
+Due to the limited time of the project, there are still a number of options for further development that should be considered. Basically, this optiones for improvement can be divided into three different areas: the cloud itself, functionality, app design.
+
+**Wolke:**
+- Bessere Lichtverteilung durch größere oder mehrere LED strips in einer Wolke
+- Diffuses Licht für stärkere Atmosphäre
+- Stabilität der Wolken
+- Dauerhafte Stromquelle (eventuell über Kippschalter steuerbar)
+
+**Funktionalität:**
+- Kompatibilität mehrerer Wolken (Steuerbar über ein Gerät)
+- Detailliertere Farbschemen
+- Kleinere "Wettergruppen", also mehr Auswahl
+- Suchfunktion, wie bei einer Wetterapp, nach beliebigem Standort
+
+
+**App-Design:**
+- Responsive design
+- Additional views or split the view:
+  - #1: connection via bluetooth
+  - #2: control the cloud, choose location
+  - #3: choose individual weather regardless of weather data
