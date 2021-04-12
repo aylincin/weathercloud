@@ -1,18 +1,10 @@
 # WEATHERCLOUD
-
-Kurze Einführung was weathercloud ist
-
-- In welchem Rahmen fand das Projekt statt?
-- Wer ist daran beteiligt?
-- Wer betreut das Projekt?
-
-## IDEA
-Idee der Wetterwolke kurz erklärt
+WEATHERCLOUD is a student project developed as part of the elective course **Mediale Inszenierung** under the direction of *Lukas Loss* at the University of Applied Sciences Düsseldorf. The project includes a physical cloud with an LED strip that can visualize the live weather data of different locations. The functionality of the cloud is realized via Arduino and a corresponding Flutter app for Android and iOS. Possible locations, but also individual weather programs can be selected via Bluetooth connection using the app.
 
 ## CONCEPT
-- Für wen ist die Wolke?
-- An welchen Orten?
-- Für welche Stimmung?
+The cloud can be used in both, private and corporate, contexts. The impressive thing about this project is that, conceptually speaking, it does not apply to one specific target group. On the one hand, the cloud can be placed in a living room but also in a child's room as a kind of a night light. On the other hand, an installation can be developed in which several clouds are attached in an international company and display the weather data of the different locations. Multiple clouds can also be used as event or store decorations. 
+
+Since the cloud can theoretically visualize any weather situation, it is also suitable for any mood and can be adapted to the appropriate occasion or the desired atmosphere. For this purpose, other color schemes can also be added as desired.
 
 ## THE WEATHER
 - Wieso 8 Programme?
