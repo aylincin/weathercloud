@@ -48,9 +48,12 @@ The following contains a list of materials (hardware and software) as well as in
 - Flutter SDK ([Windows](https://flutter.dev/docs/get-started/install/windows), [macOS](https://flutter.dev/docs/get-started/install/macos))
 
 **Instructions**
+
 *Corpus:*
 1. With rabbit wires, form the corpus of the cloud as desired
-2. Wrap the LED strip around the corpus as desired. Attach the strip with wires to the corpus that they are fixed and not loose.
+2. Wrap the LED strip around the corpus as desired. 
+3. Attach the strip with wires to the corpus that they are fixed and not loose.
+4. Add the cotton to hide the leds and to get a look of a cloud
 
 *Arduino and LED:*
 1. You have to solder/wire your Arduino. 
