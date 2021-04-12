@@ -1,16 +1,42 @@
-# weathercloud
+# WEATHERCLOUD
 
-A new Flutter application.
+Kurze Einführung was weathercloud ist
 
-## Getting Started
+- In welchem Rahmen fand das Projekt statt?
+- Wer ist daran beteiligt?
+- Wer betreut das Projekt?
 
-This project is a starting point for a Flutter application.
+## IDEA
+Idee der Wetterwolke kurz erklärt
 
-A few resources to get you started if this is your first Flutter project:
+## CONCEPT
+- Für wen ist die Wolke?
+- An welchen Orten?
+- Für welche Stimmung?
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+## THE WEATHER
+- Wieso 8 Programme?
+- Woher die Daten?
+- Wieso welche Farben?
+- Welche Farben?
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## HOW TO BUILD THE WEATHERCLOUD
+- Hier Bastelanleitung und Materialliste
+
+## THE APP
+- Hier Bilder der App einfügen und kurz die Funktionen erkären
+
+### WHY FLUTTER?
+- Hier kurz Erklären warum Flutter benutzt wurde
+
+### INSTALLATION GUIDE
+- Hier erklären (auch wie Repo geklont wird)
+- Welche Software braucht man dafür?
+
+## ISSUES
+- Hier kurz auf Probleme bei Entwicklung eingehen
+  - Limitierungen Flutter
+  - Probleme Arduino
+
+## WEITERENTWICKLUNG
+Wie kann die App weiterentwickelt und immer weiter verbessert werden?
