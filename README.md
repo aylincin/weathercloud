@@ -82,7 +82,7 @@ The following contains a list of materials (hardware and software) as well as in
 *Optional:*
 To avoid the Arduino laying directly on the cotton, you can print a case for your Arduino to protect it from damage or dust. The used model for the case, as seen in the picture below, was adopted from Thingiverse and can be downloaded [here](https://www.thingiverse.com/thing:608121).
 
-
+![Arduino and Bluetooth chip with case](resources/Arduino.png)
 
 ### WHY FLUTTER?
 We used Google's UI toolkit Flutter for building our app. With Flutter you can deploy your application on Android and iOS mobile phones.
