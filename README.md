@@ -29,8 +29,7 @@ Via app the cloud can be controlled. As seen in the image below, the user can ch
 - Home (your actual location)
 - New York
 - Sydney
-
-If desired, the user can also choose the different weather types manually.
+- If desired, the user can also choose the different weather types manually.
 
 ![App for cloud controll](resources/AppFoto.png)
 
