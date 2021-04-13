@@ -25,7 +25,14 @@ To access live weather data, the API of [wunderground.com](https://www.wundergro
 The different colors to display the weather were chosen according to personal favor.
 
 ## THE APP
-Hier einfach die drei Bilder der App (wie in der Präsentation einfügen)
+Via app the cloud can be controlled. As seen in the image below, the user can choose between 3 locations. **Home** always stands for the actual location tracked via GPS. For now, weather data can be retrieved from **3** different locations and displayed on the cloud:
+- Home (your actual location)
+- New York
+- Sydney
+
+If desired, the user can also choose the different weather types manually.
+
+![App for cloud controll](resources/AppFoto.png)
 
 ## HOW TO BUILD THE WEATHERCLOUD
 The following contains a list of materials (hardware and software) as well as instructions to build a weathercloud.
@@ -74,13 +81,13 @@ The following contains a list of materials (hardware and software) as well as in
 8. Build the project to your phone
 
 ### WHY FLUTTER?
-- We used Google's UI toolkit Flutter for building our app. With Flutter you can deploy your application on Android and iOS mobile phones.
+We used Google's UI toolkit Flutter for building our app. With Flutter you can deploy your application on Android and iOS mobile phones.
 
 ## ISSUES
-- During the development process we experienced some problems.
-  - It was rather complicated to use the bluetooth functionality in linked pages, so we created a single-paged application for now to control all funcitonalities.
-  - We weren't able top visualise all colors with the LED strip due to lighting limitations. 
-  - We used the RX and TX pin for the bluetooth chip which blocked the upload via USB of the Arduino IDE
+During the development process we experienced some problems.
+- It was rather complicated to use the bluetooth functionality in linked pages, so we created a single-paged application for now to control all funcitonalities.
+- We weren't able top visualise all colors with the LED strip due to lighting limitations. 
+- We used the RX and TX pin for the bluetooth chip which blocked the upload via USB of the Arduino IDE
 
 ## SUBSEQUENT DEVELOPMENT
 Due to the limited time of the project, there are still a number of options for further development that should be considered. Basically, this options for improvement can be divided into three different areas: the cloud itself, functionality, app design.
